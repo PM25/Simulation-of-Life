@@ -19,10 +19,22 @@ image = pg.transform.scale(pg.image.load("images/carrots.png"), (25, 25))  # 讀
 class CarrotSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.x = x
+        self.y = y
+        self.day = 0
+        self.age = 0
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = [0,0]
+        self.check()
+        
 
     def update(self):
-        pass
+        self.day += 1
+        if self.day > 50:
+            self.age += 1
+            self.day =0
+            
 
     def birth(self, direction):
         pass
