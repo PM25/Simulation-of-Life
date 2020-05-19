@@ -35,7 +35,7 @@ class CarrotSprite(pg.sprite.Sprite):
             self.age += 1
             self.day = random.randint(0,50)
             if 3 <= self.age <=15:
-                self.birth(random.choice['u','d','r','l'])
+                self.birth(random.choice(['u','d','r','l']))
             if self.age > 20:
                 self.kill()
                 
@@ -53,7 +53,7 @@ class CarrotSprite(pg.sprite.Sprite):
             
 
     def check(self):
-        pass
+        group.add(self)
 
 
 # 程式開始
