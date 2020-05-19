@@ -33,12 +33,23 @@ class CarrotSprite(pg.sprite.Sprite):
         self.day += 1
         if self.day > 50:
             self.age += 1
-            self.day = 0
-            
-
+            self.day = random.randint(0,50)
+            if 3 <= self.age <=15:
+                self.birth(random.choice['u','d','r','l'])
+            if self.age > 20:
+                self.kill()
+                
+                
     def birth(self, direction):
-        pass
-        #if direction == 'u':
+         if direction == 'u':
+             self.y -=25
+         if direction == 'd':
+             self.y +=25
+         if direction == 'r':
+             self.x +=25
+         if direction == 'l':
+             self.x -=25
+             carrot = CarrotSprite(self.x , self.y)
             
 
     def check(self):
