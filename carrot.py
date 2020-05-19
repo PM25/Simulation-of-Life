@@ -31,7 +31,7 @@ class CarrotSprite(pg.sprite.Sprite):
 
     def update(self):
         self.day += 1
-        if self.day > 50:
+        if self.day == 50:
             self.age += 1
             self.day = random.randint(0,50)
             if 3 <= self.age <=15:
@@ -54,7 +54,7 @@ class CarrotSprite(pg.sprite.Sprite):
 
     def check(self):
         group.add(self)
-
+###問下面程式的意思!
 
 # 程式開始
 if __name__ == "__main__":

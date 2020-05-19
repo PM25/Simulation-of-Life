@@ -27,10 +27,12 @@ class RabbitSprite(pg.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
+        self.check()
 
 
     def update(self):
-        pass
+        self.day += 1
+        if self.day
 
     def walk(self):
         pass
