@@ -18,7 +18,16 @@ image = pg.transform.scale(pg.image.load("images/rabbit.png"), (30, 30))  # 讀�
 class RabbitSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.day = 0
+        self.age = 0
+        self.direct = None #?
+        self.step = 0
+        self.energy = 10 
+        self.success = False #?
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+
 
     def update(self):
         pass
