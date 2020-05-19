@@ -25,7 +25,7 @@ class CarrotSprite(pg.sprite.Sprite):
         self.age = 0
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.center = [0,0]
+        self.rect.center = [x,y]
         self.check()
         
 
@@ -33,11 +33,13 @@ class CarrotSprite(pg.sprite.Sprite):
         self.day += 1
         if self.day > 50:
             self.age += 1
-            self.day =0
+            self.day = 0
             
 
     def birth(self, direction):
         pass
+        #if direction == 'u':
+            
 
     def check(self):
         pass
