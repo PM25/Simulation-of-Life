@@ -32,13 +32,29 @@ class RabbitSprite(pg.sprite.Sprite):
 
     def update(self):
         self.day += 1
-        if self.day
+        if self.day == 50:
+            self.age += 1
+            self.energy -= 2
+            self.day = random.randint(0,50)
+            if 15 <= self.age <= 20:
+                self.birth(random.choice(['u','d','r','l']))
+                #能量-12?
+            if self.age > 30:
+                self.kill()
 
     def walk(self):
-        pass
+        if self.step = 0:
+            
 
     def birth(self, direction):
-        pass
+         if direction == 'u':
+             self.y -=25
+         if direction == 'd':
+             self.y +=25
+         if direction == 'r':
+             self.x +=25
+         if direction == 'l':
+             self.x -=25
 
     def check(self):
         pass

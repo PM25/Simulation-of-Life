@@ -54,7 +54,7 @@ class CarrotSprite(pg.sprite.Sprite):
 
     def check(self):
         group.add(self)
-###問下面程式的意思!
+        #pg.sprite.spritecollideany
 
 # 程式開始
 if __name__ == "__main__":
