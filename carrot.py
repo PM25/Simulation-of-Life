@@ -43,18 +43,19 @@ class CarrotSprite(pg.sprite.Sprite):
     def birth(self, direction):
          if direction == 'u':
              self.y -=25
-         if direction == 'd':
+         elif direction == 'd':
              self.y +=25
-         if direction == 'r':
+         elif direction == 'r':
              self.x +=25
-         if direction == 'l':
+         elif direction == 'l':
              self.x -=25
          carrot = CarrotSprite(self.x , self.y)
             
 
     def check(self):
         co = pg.sprite.spritecollideany(self,group)
-        if co == None:
+        co1 =pg.sprite.spritecollideany(self,block.group)
+        if co == None and co1 == None:
             group.add(self)
 
 # 程式開始
