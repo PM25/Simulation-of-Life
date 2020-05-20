@@ -49,12 +49,13 @@ class CarrotSprite(pg.sprite.Sprite):
              self.x +=25
          if direction == 'l':
              self.x -=25
-             carrot = CarrotSprite(self.x , self.y)
+         carrot = CarrotSprite(self.x , self.y)
             
 
     def check(self):
-        group.add(self)
-        #pg.sprite.spritecollideany
+        co = pg.sprite.spritecollideany(self,group)
+        if co == None:
+            group.add(self)
 
 # 程式開始
 if __name__ == "__main__":
