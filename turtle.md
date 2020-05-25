@@ -69,7 +69,7 @@
 
         -   檢查有無跟草碰撞
             ```python
-            if pg.sprite.spritecollide(單個物件(自己), 群體物件(grass.group), True):
+            pg.sprite.spritecollide(單個物件(自己), 群體物件(grass.group), True)
             ```
         -   如果有碰撞的話
             ```python
@@ -78,7 +78,7 @@
         -   如果有碰撞的話，且能量大於 100 的話
 
             ```python
-            self.birth(random.choice(["u", "d", "r", "l"]))
+            self.birth(...)
             ```
 
     -   #### 生小孩: birth()

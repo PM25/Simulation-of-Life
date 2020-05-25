@@ -3,6 +3,7 @@ import random
 
 # 自己的 library
 import env
+import block
 import carrot
 
 # 設定起始變數
@@ -77,8 +78,8 @@ if __name__ == "__main__":
 
     # 隨機產生 3隻兔子
     for i in range(3):
-        x = random.randint(0, window_size[0])  # x座標
-        y = random.randint(0, window_size[1])  # y座標
+        x = random.randint(30, window_size[0] - 50)  # x座標
+        y = random.randint(30, window_size[1] - 50)  # y座標
         RabbitSprite(x, y)  # 在 x, y 座標創建一隻兔子
 
     # 把所有物件集合起來
