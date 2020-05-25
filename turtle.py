@@ -23,13 +23,7 @@ class TurtleSprite(pg.sprite.Sprite):
     def update(self):
         pass
 
-    def walk(self):
-        pass
-
     def birth(self, direction):
-        pass
-
-    def check(self):
         pass
 
 
