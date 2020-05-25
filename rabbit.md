@@ -58,8 +58,8 @@
             ```
         -   更新自身座標 ( self.x, self.y )
             ```python
-            self.x += self.xStep / 3
-            self.y += self.yStep / 3
+            self.x += self.xStep / 1.5
+            self.y += self.yStep / 1.5
             ```
         -   由自己的座標(self.x, self.y) 來更新圖片在遊戲中的位置 (self.rect.center)
             ```python
