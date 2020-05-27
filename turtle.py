@@ -3,6 +3,7 @@ import random
 
 # 自己的 library
 import env
+import block
 import grass
 
 # 設定起始變數
@@ -23,13 +24,7 @@ class TurtleSprite(pg.sprite.Sprite):
     def update(self):
         pass
 
-    def walk(self):
-        pass
-
     def birth(self, direction):
-        pass
-
-    def check(self):
         pass
 
 
@@ -50,8 +45,8 @@ if __name__ == "__main__":
 
     # 隨機產生 3隻烏龜
     for i in range(3):
-        x = random.randint(0, window_size[0])  # x座標
-        y = random.randint(0, window_size[1])  # y座標
+        x = random.randint(30, window_size[0] - 50)  # x座標
+        y = random.randint(30, window_size[1] - 50)  # y座標
         TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜
 
     # 把所有物件集合起來
