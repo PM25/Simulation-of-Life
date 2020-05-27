@@ -38,26 +38,35 @@ class RabbitSprite(pg.sprite.Sprite):
             self.day = random.randint(0,50)
             if 15 <= self.age <= 20:
                 self.birth(random.choice(['u','d','r','l']))
-                #能量-12?
-            if self.age > 30:
+                self.energy -= 12
+            elif self.age > 30:
                 self.kill()
+            elif self.energy <= 0:
+                self.kill()
+            else:
+                self.walk()
 
     def walk(self):
-        if self.step = 0:
+        #if self.step = 0:
+        pass
             
 
     def birth(self, direction):
-         if direction == 'u':
-             self.y -=25
-         if direction == 'd':
-             self.y +=25
-         if direction == 'r':
-             self.x +=25
-         if direction == 'l':
-             self.x -=25
+        if direction == 'u':
+            self.rect.center[1] -=30
+        if direction == 'd':
+            self.rect.center[1] +=30
+        if direction == 'r':
+            self.rect.center[0] +=30
+        if direction == 'l':
+            self.rect.center[0] -=30
+        rabbit = RabbitSprite(self.rect.center[0],self.rect.center[1])
+         
 
     def check(self):
-        pass
+        co = pg.sprite.spritecollideany(self,group)
+        if co == None:
+            group.add(self)
 
 
 # 程式從這裡開始
