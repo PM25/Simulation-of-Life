@@ -19,13 +19,40 @@ image = pg.transform.scale(pg.image.load("images/turtle.png"), (30, 30))  # 讀�
 class TurtleSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.image=image
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.engery=0
+        self.x=x
+        self.y=y
+        self.xStep=random.randint(-3,3)
+        self.yStep=random.randint(-3,3)
+        group.add(self)
+        
 
     def update(self):
-        pass
+        r=random.random()
+        if r<0.01:
+            self.xStep = random.randint(-3, 3)
+            self.yStep = random.randint(-3, 3)
+        # if pg.sprite.spritecollideany(self, block.horiz_walls):
+        #     self.yStep = -self.yStep
+        #     self.xStep = random.randint(-3, 3)
+        # if pg.sprite.spritecollideany(self, block.vert_walls):
+        #     self.xStep = -self.xStep
+        #     self.yStep = random.randint(-3, 3)
+        self.x += self.xStep / 3
+        self.y += self.yStep / 3
+        self.rect.center = [self.x, self.y]
 
-    def birth(self, direction):
-        pass
+        if pg.sprite.spritecollide(self, grass.group, True):
+            self.engery+=10
+            if self.engery>100:
+                self.birth()
+
+
+
+    
 
 
 # 程式從這裡開始
