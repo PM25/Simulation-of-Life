@@ -19,17 +19,44 @@ image = pg.transform.scale(pg.image.load("images/carrots.png"), (25, 25))  # 讀
 class CarrotSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.x = x
+        self.y = y
+        self.day = 0
+        self.age = 0
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = [x,y]
+        self.check()
+        
 
     def update(self):
-        pass
-
+        self.day += 1
+        if self.day == 50:
+            self.age += 1
+            self.day = random.randint(0,50)
+            if 3 <= self.age <=15:
+                self.birth(random.choice(['u','d','r','l']))
+            if self.age > 20:
+                self.kill()
+                
+                
     def birth(self, direction):
-        pass
+         if direction == 'u':
+             self.y -=25
+         elif direction == 'd':
+             self.y +=25
+         elif direction == 'r':
+             self.x +=25
+         elif direction == 'l':
+             self.x -=25
+         carrot = CarrotSprite(self.x , self.y)
+            
 
     def check(self):
-        pass
-
+        co = pg.sprite.spritecollideany(self,group)
+        co1 =pg.sprite.spritecollideany(self,block.group)
+        if co == None and co1 == None:
+            group.add(self)
 
 # 程式開始
 if __name__ == "__main__":

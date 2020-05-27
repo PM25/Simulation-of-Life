@@ -2,16 +2,16 @@
 
 # 烏龜 (物件 TurtleSprite)
 
-    會隨機到處亂走，如果路上碰到了草則會停下來把它吃下去
-    到達一定年紀以後會開始生小孩
+    會隨機到處亂走，如果路上碰到了草則會把它吃下去
+    能量夠高的話就會開始生小孩
 
 -   ### 屬性(變數)
-    -   天數 = 0
-    -   年紀 = 0
-    -   方向 = None (走路方向)
-    -   步數 = 0 (還剩幾步要走)
-    -   能量 = 5
-    -   成功 = False (是否這個物件有創建成功)
+
+    -   x (x 座標)
+    -   y (y 座標)
+    -   energy = 0 (能量)
+    -   xStep = random.randint(-3, 3) (每走一步 x 移動方向)
+    -   yStep = random.randint(-3, 3) (每走一步 y 移動方向)
     -   圖片
         ```python
         self.image = 圖片( 程式碼 14 行 圖片大小為30x30 )
@@ -24,60 +24,65 @@
         ```python
         self.rect.center = [x座標, y座標]
         ```
+
 -   ### 方法(Function)
+
     -   #### 初始化: \_\_init\_\_()
         -   設定屬性
-        -   檢查自己這個位置上是否沒有任何東西(方法的第四點)
-        -   如果都沒有撞到任何東西的話則把自己加到 group(程式碼 11 行) 裡面去 `group.add(self)`
-            並且設定自己的狀態為成功
+        -   把自己加到 group(程式碼 11 行) 裡面去 `group.add(self)`
     -   #### 更新: update()
-        -   天數 +1
-        -   每經過 50 天，年紀 +1，能量 -1
-        -   每經過 50 天，把天數重新歸零(或是小於 50 的隨機值)
-        -   每次年紀 +1 時檢查年紀
-            -   0~19 歲: 沒有動作
-            -   20~25 歲: 隨機往上、下、左、右其中一個方向生小孩(失敗的話那次執行就放棄)，如果成功的話則能量 -6
-            -   26~50 歲: 沒有動作
-            -   超過 50 歲: 掛掉
-                `self.kill()`
-        -   檢查能量如果小於零的話會掛掉
-        -   走路 `self.walk()`
-        #### 走路: walk()
-        -   如果步數等於零的話
-            -   選擇一個新方向(上、下、左、右、**不動作**)
-            -   設定步數等於 30
-        -   根據方向來移動座標位置(每次動一格)
+
+        -   隨機取得一個亂數 `random.random()`
+        -   如果亂數 < 0.01 的話，隨機更改 xStep, yStep 的值
             ```python
-            self.rect.x = 新的 x 座標
-            self.rect.y = 新的 y 座標
+            xStep = random.randint(-3, 3)
+            yStep = random.randint(-3, 3)
             ```
-        -   步數 -1
-        -   如果自己的位置超出邊界
-            -   設定自己的新座標在遊戲範圍
-                ```python
-                0 <= self.rect.x <= window_size[0] - 30
-                0 <= self.rect.y <= window_size[1] - 30
-                ```
-        -   檢查有沒有跟任何的草碰撞
+        -   檢查有無跟牆壁碰撞
             ```python
-            for sprite in pg.sprite.spritecollide(單個物件, 群體物件, False):
-                sprite #在群體物件中跟單個物件碰到的物體
+            pg.sprite.spritecollideany(self, block.horiz_walls):
+            pg.sprite.spritecollideany(self, block.vert_walls):
             ```
-            -   如果自己的能量小於等於 25 且碰到草的話
-                -   把草吃掉(砍掉那株草)
-                -   自己的能量 +3
-                -   設定自己的方向為不動作(停下來吃草)、步數設為 30
+        -   如果跟水平牆壁碰撞的話
+            ```python
+            # 更改 y 移動的方向
+            self.yStep = -self.yStep
+            self.xStep = random.randint(-3, 3)
+            ```
+            如果跟垂直牆壁碰撞的話
+            ```python
+            # 更改 x 移動的方向
+            self.xStep = -self.xStep
+            self.yStep = random.randint(-3, 3)
+            ```
+        -   更新自身座標 ( self.x, self.y )
+            ```python
+            self.x += self.xStep / 3
+            self.y += self.yStep / 3
+            ```
+        -   由自己的座標(self.x, self.y) 來更新圖片在遊戲中的位置 (self.rect.center)
+            ```python
+            self.rect.center = [x座標, y座標]
+            ```
+
+    -   吃草
+
+        -   檢查有無跟草碰撞
+            ```python
+            pg.sprite.spritecollide(單個物件(自己), 群體物件(grass.group), True)
+            ```
+        -   如果有碰撞的話
+            ```python
+            能量 += 10
+            ```
+        -   如果有碰撞的話，且能量大於 100 的話
+
+            ```python
+            self.birth(...)
+            ```
+
     -   #### 生小孩: birth()
         -   接受上、下、左、右四種方向
         -   在相對應的方向生出一隻烏龜
             `自己的 x座標: self.rect.center[0]`
             `自己的 y座標: self.rect.center[1]`
-        -   如果該位置已經有其它烏龜存在的話則不會生出來
-        -   回傳是否有成功生下小孩 (True 或 False)
-    -   #### 檢查: check()
-        -   檢查自己的位置上有沒有其它的烏龜 `group`
-        -   ```python
-            # 如果回傳 None 的話代表單個物件沒有跟物件群體裡面的任意物件撞到
-            pg.sprite.spritecollideany(單個物件, 物件群體)
-            ```
-        -   如果都沒有撞到東西的話回傳 `True`

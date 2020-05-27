@@ -3,6 +3,7 @@ import random
 
 # 自己的 library
 import env
+import block
 import carrot
 
 # 設定起始變數
@@ -18,16 +19,43 @@ image = pg.transform.scale(pg.image.load("images/rabbit.png"), (30, 30))  # 讀�
 class RabbitSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.day = 0
+        self.age = 0
+        self.direct = None #?
+        self.step = 0
+        self.energy = 10 
+        self.success = False #?
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.check()
+
 
     def update(self):
-        pass
+        self.day += 1
+        if self.day == 50:
+            self.age += 1
+            self.energy -= 2
+            self.day = random.randint(0,50)
+            if 15 <= self.age <= 20:
+                self.birth(random.choice(['u','d','r','l']))
+                #能量-12?
+            if self.age > 30:
+                self.kill()
 
     def walk(self):
-        pass
+        if self.step = 0:
+            
 
     def birth(self, direction):
-        pass
+         if direction == 'u':
+             self.y -=25
+         if direction == 'd':
+             self.y +=25
+         if direction == 'r':
+             self.x +=25
+         if direction == 'l':
+             self.x -=25
 
     def check(self):
         pass
@@ -50,8 +78,8 @@ if __name__ == "__main__":
 
     # 隨機產生 3隻兔子
     for i in range(3):
-        x = random.randint(0, window_size[0])  # x座標
-        y = random.randint(0, window_size[1])  # y座標
+        x = random.randint(30, window_size[0] - 50)  # x座標
+        y = random.randint(30, window_size[1] - 50)  # y座標
         RabbitSprite(x, y)  # 在 x, y 座標創建一隻兔子
 
     # 把所有物件集合起來
