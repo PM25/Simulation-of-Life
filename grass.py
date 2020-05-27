@@ -1,6 +1,7 @@
 import random
 import pygame as pg
 
+
 # 自己的 library
 import env
 import block
@@ -19,16 +20,49 @@ image = pg.transform.scale(pg.image.load("images/grass.png"), (25, 25))  # 讀�
 class GrassSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        pass
+        self.image=image
+        self.rect = self.image.get_rect()
+        self.rect.center = [x, y]
+        self.day=0
+        self.age=0
+        self.a=x
+        self.b=y
+        self.check()
 
-    def update(self):
-        pass
 
-    def birth(self, direction):
-        pass
+        
 
     def check(self):
-        pass
+        co = pg.sprite.spritecollideany(self,group)
+        co1 =pg.sprite.spritecollideany(self,block.group)
+        if co == None:
+            group.add(self)
+    
+    def birth(self, direction):
+        if direction=="u":
+            self.b-=25
+        if direction=="d":
+            self.b+=25
+        if direction=="r":
+            self.a-=25
+        if direction=="l":
+            self.a+=25 
+            grass=GrassSprite(self.a,self.b)
+          
+        
+
+    
+    def update(self):
+        self.day+=1 
+        if self.day==50:
+            self.age+=1
+            self.day=random.randint(0,50)
+            if 2 <= self.age <=13:
+                self.birth(random.choice(["u","d","l","r"]))
+            if 15 < self.age:
+                self.kill()
+            
+
 
 
 # 程式開始
