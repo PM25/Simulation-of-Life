@@ -33,10 +33,6 @@ class GrassSprite(pg.sprite.Sprite):
         
 
     def check(self):
-        #group.add(self)
-        # co=pg.sprite.spritecollideany(self,group)
-        # if co==None:
-        #     group.add(self)
         co = pg.sprite.spritecollideany(self,group)
         co1 =pg.sprite.spritecollideany(self,block.group)
         if co == None:
