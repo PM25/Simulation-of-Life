@@ -3,6 +3,7 @@ import random
 
 # 自己的 library
 import env
+
 import block
 import grass
 
@@ -35,12 +36,12 @@ class TurtleSprite(pg.sprite.Sprite):
         if r<0.01:
             self.xStep = random.randint(-3, 3)
             self.yStep = random.randint(-3, 3)
-        # if pg.sprite.spritecollideany(self, block.horiz_walls):
-        #     self.yStep = -self.yStep
-        #     self.xStep = random.randint(-3, 3)
-        # if pg.sprite.spritecollideany(self, block.vert_walls):
-        #     self.xStep = -self.xStep
-        #     self.yStep = random.randint(-3, 3)
+        if pg.sprite.spritecollideany(self, block.horiz_walls):
+             self.yStep = -self.yStep
+             self.xStep = random.randint(-3, 3)
+        if pg.sprite.spritecollideany(self, block.vert_walls):
+             self.xStep = -self.xStep
+             self.yStep = random.randint(-3, 3)
         self.x += self.xStep / 3
         self.y += self.yStep / 3
         self.rect.center = [self.x, self.y]
@@ -48,7 +49,20 @@ class TurtleSprite(pg.sprite.Sprite):
         if pg.sprite.spritecollide(self, grass.group, True):
             self.engery+=10
             if self.engery>100:
-                self.birth()
+                self.birth(random.choice(['u','d','r','l']))
+    def birth(self,direction):
+        if direction=="u":
+            self.y-=25
+        if direction=="d":
+            self.y+=25
+        if direction=="r":
+            self.x-=25
+        if direction=="l":
+            self.x+=25 
+            grass=GrassSprite(self.x,self.y)
+          
+        
+
 
 
 
