@@ -61,29 +61,42 @@
             self.x += self.xStep / 1.5
             self.y += self.yStep / 1.5
             ```
+        -  檢查有無超出邊界
+            ```python
+            if self.x <= 30:
+                self.x = 30
+            if self.y <= 30:
+                self.y = 30
+            if self.x >= window_size[0] - 30:
+                self.x = window_size[0] - 30
+            if self.y >= window_size[1] - 30:
+                self.y = window_size[1] - 30
+            ```  
         -   由自己的座標(self.x, self.y) 來更新圖片在遊戲中的位置 (self.rect.center)
+
             ```python
             self.rect.center = [x座標, y座標]
             ```
 
-    -   吃草
+        -   吃胡蘿蔔
 
-        -   檢查有無跟草碰撞
-            ```python
-            pg.sprite.spritecollide(單個物件(自己), 群體物件(grass.group), True)
-            ```
-        -   如果有碰撞的話
-            ```python
-            能量 += 10
-            ```
-        -   如果有碰撞的話，且能量大於 100 的話
+            -   檢查有無跟胡蘿蔔碰撞
+                ```python
+                pg.sprite.spritecollide(單個物件(自己), 群體物件(carrot.group), True)
+                ```
+            -   如果有碰撞的話
+                ```python
+                能量 += 10
+                ```
+            -   如果有碰撞的話，且能量大於 100 的話
 
-            ```python
-            self.birth(...)
-            ```
+                ```python
+                self.birth(...)
+                能量 = 0
+                ```
 
     -   #### 生小孩: birth()
         -   接受上、下、左、右四種方向
         -   在相對應的方向生出一隻兔子
-            `自己的 x座標: self.rect.center[0]`
-            `自己的 y座標: self.rect.center[1]`
+            `自己的 x座標: self.rect.x`
+            `自己的 y座標: self.rect.y`
