@@ -50,6 +50,7 @@ class TurtleSprite(pg.sprite.Sprite):
             self.engery+=10
             if self.engery>100:
                 self.birth(random.choice(['u','d','r','l']))
+                self.engery = 0
     def birth(self,direction):
         if direction=="u":
             self.y-=25
@@ -59,7 +60,7 @@ class TurtleSprite(pg.sprite.Sprite):
             self.x-=25
         if direction=="l":
             self.x+=25 
-            turtle=TurtleSprite(self.x,self.y)
+        turtle=TurtleSprite(self.x,self.y)
           
         
 
