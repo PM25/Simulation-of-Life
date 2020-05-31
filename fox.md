@@ -6,12 +6,12 @@
 -   ### 方法(Function)
 
     -   #### 初始化: \_\_init\_\_(x, y)
-        -   x (x 座標)
-        -   y (y 座標)
-        -   energy = 0 (能量)
-        -   xStep = random.randint(-2, 2) (每走一步 x 移動方向)
-        -   yStep = random.randint(-2, 2) (每走一步 y 移動方向)
-        -   index = 0
+        -   self.x = x 座標
+        -   self.y = y 座標
+        -   self.energy = 0 (能量)
+        -   self.xStep = random.randint(-2, 2) (每走一步 x 移動方向)
+        -   self.yStep = random.randint(-2, 2) (每走一步 y 移動方向)
+        -   self.index = 0
         -   圖片
             ```python
             self.image = self.images[self.index]
@@ -40,8 +40,8 @@
         -   隨機取得一個亂數 `random.random()`
         -   如果亂數 < 0.01 的話，隨機更改 xStep, yStep 的值 (-2 ~ 2)
             ```python
-            xStep = random.randint(-2, 2)
-            yStep = random.randint(-2, 2)
+            self.xStep = random.randint(-2, 2)
+            self.yStep = random.randint(-2, 2)
             ```
         -   檢查有無跟牆壁碰撞
             ```python
