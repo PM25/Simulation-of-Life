@@ -95,7 +95,7 @@
             -   如果有碰撞的話，且能量大於 30 的話
 
                 ```python
-                self.birth(...)
+                self.birth(random.choice(["u", "d", "r", "l"]))
                 能量 = 0
                 ```
 
