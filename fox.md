@@ -86,7 +86,7 @@
 
             -   檢查有無跟烏龜碰撞
                 ```python
-                pg.sprite.spritecollide(單個物件(自己), 群體物件(carrot.group), True)
+                pg.sprite.spritecollide(單個物件(自己), 群體物件(turtle.group), True)
                 ```
             -   如果有碰撞的話
                 ```python
@@ -151,6 +151,5 @@
             ```python
             FoxSprite(...)
             ```
-        -   在相對應的方向生出狐狸
-            `自己的 x座標: self.rect.x`
+        -   `自己的 x座標: self.rect.x`
             `自己的 y座標: self.rect.y`
