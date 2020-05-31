@@ -12,7 +12,14 @@ random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有烏龜物件
 window_size = env.WINDOW_SIZE  # 視窗大小
 FPS = env.FPS  # 遊戲更新率
-image = pg.transform.scale(pg.image.load("images/turtle.png"), (30, 30))  # 讀取烏龜圖片
+walk_images = []  # 讀取動畫圖片
+for i in range(1, 6):
+    fname = f"images/animation/TURTLE/turtle{i}.png"
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
+flip_walk_images = []  # 讀取動畫圖片
+for i in range(1, 6):
+    fname = f"images/animation/TURTLE/turtle{i}.png"
+    flip_walk_images.append(pg.transform.flip(walk_images[i-1], True, False))
 
 
 # TODO: 幫我完成下面這個物件!
@@ -20,7 +27,8 @@ image = pg.transform.scale(pg.image.load("images/turtle.png"), (30, 30))  # 讀�
 class TurtleSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        self.image=image
+        self.index = 0
+        self.image=walk_images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         self.engery=0
@@ -32,6 +40,13 @@ class TurtleSprite(pg.sprite.Sprite):
         
 
     def update(self):
+        self.index += 1
+        if self.index >= len(walk_images):
+            self.index = 0
+        if(self.xStep < 0):
+            self.image = walk_images[self.index]
+        else:
+            self.image = flip_walk_images[self.index]
         r=random.random()
         if r<0.01:
             self.xStep = random.randint(-3, 3)
@@ -44,6 +59,14 @@ class TurtleSprite(pg.sprite.Sprite):
              self.yStep = random.randint(-3, 3)
         self.x += self.xStep / 3
         self.y += self.yStep / 3
+        if self.x <= 30:
+            self.x = 30
+        if self.y <= 30:
+            self.y = 30
+        if self.x >= window_size[0] - 30:
+            self.x = window_size[0] - 30
+        if self.y >= window_size[1] - 30:
+            self.y = window_size[1] - 30
         self.rect.center = [self.x, self.y]
 
         if pg.sprite.spritecollide(self, grass.group, True):
@@ -53,14 +76,14 @@ class TurtleSprite(pg.sprite.Sprite):
                 self.engery = 0
     def birth(self,direction):
         if direction=="u":
-            self.y-=25
+            turtle=TurtleSprite(self.x,self.y-25)
         if direction=="d":
-            self.y+=25
+            turtle=TurtleSprite(self.x,self.y+25)
         if direction=="r":
-            self.x-=25
+            turtle=TurtleSprite(self.x-25,self.y)
         if direction=="l":
-            self.x+=25 
-        turtle=TurtleSprite(self.x,self.y)
+            turtle=TurtleSprite(self.x+25,self.y)
+        
           
         
 

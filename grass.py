@@ -48,13 +48,10 @@ class GrassSprite(pg.sprite.Sprite):
 
     def update(self):
         self.day += 1
-        if self.day == 365:
+        if self.day == 100:
             self.age += 1
-            self.day = random.randint(0, 364)
-            if 2 <= self.age <= 13:
-                self.birth(random.choice(["u", "d", "l", "r"]))
-            if 15 < self.age:
-                self.kill()
+            self.day = random.randint(0, 99)
+            self.birth(random.choice(["u", "d", "l", "r"]))
 
 
 # 程式開始
