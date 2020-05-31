@@ -33,8 +33,7 @@
             ```
         -   用 self.x, self.y 更新自身位置
             ```python
-            self.x += self.xStep
-            self.y += self.yStep
+            self.rect.center = [自己的 x座標, 自己的 y座標]
             ```
 
     -   #### 移動: move(direction)
