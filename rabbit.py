@@ -11,7 +11,14 @@ random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有兔子物件
 window_size = env.WINDOW_SIZE  # 視窗大小
 FPS = env.FPS  # 遊戲更新率
-image = pg.transform.scale(pg.image.load("images/rabbit.png"), (30, 30))  # 讀取兔子圖片
+walk_images = []  # 讀取動畫圖片
+for i in range(1, 17):
+    fname = f"images/animation/RABBIT/rabbit{i}.png"
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
+flip_walk_images = []  # 讀取動畫圖片
+for i in range(1, 17):
+    fname = f"images/animation/RABBIT/rabbit{i}.png"
+    flip_walk_images.append(pg.transform.flip(walk_images[i-1], True, False))
 
 
 # TODO: 幫我完成下面這個物件!
@@ -19,18 +26,26 @@ image = pg.transform.scale(pg.image.load("images/rabbit.png"), (30, 30))  # 讀�
 class RabbitSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
+        self.index = 0
         self. x= x
         self.y = y
         self.energy = 0 
         self.xStep = random.randint(-3, 3)
         self.yStep = random.randint(-3, 3)
-        self.image = image
+        self.image = walk_images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         group.add(self)
 
 
     def update(self):
+        self.index += 1
+        if self.index >= len(walk_images):
+            self.index = 0
+        if(self.xStep > 0):
+            self.image = walk_images[self.index]
+        else:
+            self.image = flip_walk_images[self.index]
         r =random.random()
         if r < 0.01 :
             self.xStep = random.randint(-3, 3)
