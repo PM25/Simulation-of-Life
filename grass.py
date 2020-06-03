@@ -1,9 +1,6 @@
 import random
 import pygame as pg
 
-# 自己的 library
-import random
-import pygame as pg
 
 # 自己的 library
 import env
@@ -23,50 +20,38 @@ image = pg.transform.scale(pg.image.load("images/grass.png"), (25, 25))  # 讀�
 class GrassSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        self.image=image
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
-        self.day=0
-        self.age=0
-        self.a=x
-        self.b=y
+        self.day = 0
+        self.age = 0
+        self.a = x
+        self.b = y
         self.check()
 
-
-        
-
     def check(self):
-        #group.add(self)
-        group.add(self)
-        co=pg.sprite.spritecollideany(self,group,collided=None)
-        if co==False:
+        co = pg.sprite.spritecollideany(self, group)
+        co1 = pg.sprite.spritecollideany(self, block.group)
+        if co == None and co1 == None:
             group.add(self)
-    
+
     def birth(self, direction):
-        if direction=="u":
-            self.b-=25
-        if direction=="d":
-            self.b+=25
-        if direction=="r":
-            self.a-=25
-        if direction=="l":
-            self.a+=25 
-            grass=GrassSprite(self.a,self.b)
-          
-        
+        if direction == "u":
+            self.b -= 25
+        if direction == "d":
+            self.b += 25
+        if direction == "r":
+            self.a -= 25
+        if direction == "l":
+            self.a += 25
+        grass = GrassSprite(self.a, self.b)
 
-    
     def update(self):
-        self.day+=1 
-        if self.day==50:
-            self.age+=1
-            self.day=random.randint(0,50)
-            if 2 <= self.age <=13:
-                self.birth(random.choice(["u","d","l","r"]))
-            if 15 < self.age:
-                self.kill()
-            
-
+        self.day += 1
+        if self.day == 100:
+            self.age += 1
+            self.day = random.randint(0, 99)
+            self.birth(random.choice(["u", "d", "l", "r"]))
 
 
 # 程式開始
@@ -79,7 +64,7 @@ if __name__ == "__main__":
     pg.time.set_timer(pg.USEREVENT, 1000)
 
     # 隨機產生 5株草
-    for i in range(5):
+    for i in range(10):
         x = random.randint(0, window_size[0]) // 25 * 25  # x座標
         y = random.randint(0, window_size[1]) // 25 * 25  # y座標
         GrassSprite(x, y)  # 在 x, y 座標創建一株草

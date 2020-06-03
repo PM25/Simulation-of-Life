@@ -25,3 +25,5 @@ top_border = BlockSprite(0, window_size[1], window_size[0], border_size)  # 下�
 
 # 把邊界集合起來放到 group
 group = pg.sprite.Group(left_border, right_border, bottom_border, top_border)
+horiz_walls = pg.sprite.Group(bottom_border, top_border)
+vert_walls = pg.sprite.Group(left_border, right_border)
