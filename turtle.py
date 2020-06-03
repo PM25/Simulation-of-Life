@@ -59,7 +59,7 @@ class TurtleSprite(pg.sprite.Sprite):
             self.x-=25
         if direction=="l":
             self.x+=25 
-            grass=GrassSprite(self.x,self.y)
+        turtle=TurtleSprite(self.x,self.y)
           
         
 
