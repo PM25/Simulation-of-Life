@@ -59,7 +59,7 @@ class TurtleSprite(pg.sprite.Sprite):
              self.yStep = random.randint(-3, 3)
         self.x += self.xStep / 3
         self.y += self.yStep / 3
-        if self.x <= 30:
+        if self.x <= 20:
             self.x = 30
         if self.y <= 30:
             self.y = 30
