@@ -43,22 +43,31 @@ class RabbitSprite(pg.sprite.Sprite):
             self.yStep = random.randint(-3, 3)
         self.x += self.xStep / 1.5
         self.y += self.yStep / 1.5
-
-    def walk(self):
-        #if self.step = 0:
-        pass
-            
+        if self.x <= 30:
+            self.x = 30
+        if self.y <= 30:
+            self.y = 30
+        if self.x >= window_size[0] - 30:
+            self.x = window_size[0] - 30
+        if self.y >= window_size[1] - 30:
+            self.y = window_size[1] - 30
+        self.rect.center = [self.x, self.y]
+        if pg.sprite.spritecollide(self, carrot.group, True):
+            self.energy += 10
+            if self.energy>100:
+                self.birth(random.choice(['u','d','r','l']))
+                self.energy = 0
 
     def birth(self, direction):
         if direction == 'u':
-            self.rect.center[1] -=30
+            rabbit = RabbitSprite(self.x,self.y-25)
         if direction == 'd':
-            self.rect.center[1] +=30
+            rabbit = RabbitSprite(self.x , self.y+25)
         if direction == 'r':
-            self.rect.center[0] +=30
+            rabbit = RabbitSprite(self.x+25 , self.y)
         if direction == 'l':
-            self.rect.center[0] -=30
-        rabbit = RabbitSprite(self.rect.center[0],self.rect.center[1])
+            rabbit = RabbitSprite(self.x-25 , self.y)
+    
          
 
 
