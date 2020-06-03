@@ -4,8 +4,8 @@ import random
 # 自己的 library
 import env
 import block
-import grass
-import turtle
+import grass, carrot
+import turtle, rabbit
 
 # 設定起始變數
 random.seed(0)  # 設定亂數的種子
@@ -61,19 +61,27 @@ if __name__ == "__main__":
     pg.time.set_timer(pg.USEREVENT, 1000)
 
     # 隨機產生 100株草
-    for i in range(25):
+    for i in range(50):
         x = random.randint(0, window_size[0]) // 25 * 25  # x座標
         y = random.randint(0, window_size[1]) // 25 * 25  # y座標
         grass.GrassSprite(x, y)  # 在 x, y 座標創建一株草
+        x = random.randint(0, window_size[0]) // 25 * 25  # x座標
+        y = random.randint(0, window_size[1]) // 25 * 25  # y座標
+        carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一株草
 
     # 隨機產生 5隻烏龜
     for i in range(10):
         x = random.randint(30, window_size[0] - 30)  # x座標
         y = random.randint(30, window_size[1] - 30)  # y座標
         turtle.TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜
+        x = random.randint(30, window_size[0] - 30)  # x座標
+        y = random.randint(30, window_size[1] - 30)  # y座標
+        rabbit.RabbitSprite(x, y)  # 在 x, y 座標創建一隻烏龜
 
     # 把所有物件集合起來
-    sprites = pg.sprite.OrderedUpdates(grass.group, turtle.group, group)
+    sprites = pg.sprite.OrderedUpdates(
+        grass.group, carrot.group, turtle.group, rabbit.group, group
+    )
 
     # 遊戲迴圈
     Done = False
@@ -109,5 +117,7 @@ if __name__ == "__main__":
             if event.type == pg.QUIT:
                 Done = True  # 遊戲結束
             # 更新物件內容
-            sprites = pg.sprite.OrderedUpdates(grass.group, turtle.group, group,)
+            sprites = pg.sprite.OrderedUpdates(
+                grass.group, carrot.group, turtle.group, rabbit.group, group
+            )
     pg.quit()  # 結束遊戲

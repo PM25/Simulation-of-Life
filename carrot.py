@@ -22,7 +22,6 @@ class CarrotSprite(pg.sprite.Sprite):
         self.x = x
         self.y = y
         self.day = 0
-        self.age = 0
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = [x,y]
@@ -31,13 +30,9 @@ class CarrotSprite(pg.sprite.Sprite):
 
     def update(self):
         self.day += 1
-        if self.day == 50:
-            self.age += 1
-            self.day = random.randint(0,50)
-            if 3 <= self.age <=15:
-                self.birth(random.choice(['u','d','r','l']))
-            if self.age > 20:
-                self.kill()
+        if self.day == 365:
+            self.day = random.randint(0,364)
+            self.birth(random.choice(['u','d','r','l']))
                 
                 
     def birth(self, direction):
@@ -55,7 +50,8 @@ class CarrotSprite(pg.sprite.Sprite):
     def check(self):
         co = pg.sprite.spritecollideany(self,group)
         co1 =pg.sprite.spritecollideany(self,block.group)
-        if co == None and co1 == None:
+        co2 =pg.sprite.spritecollideany(self,grass.group)
+        if co == None and co1 == None and co2 == None:
             group.add(self)
 
 # 程式開始
