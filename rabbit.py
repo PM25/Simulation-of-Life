@@ -31,7 +31,18 @@ class RabbitSprite(pg.sprite.Sprite):
 
 
     def update(self):
-        
+        r =random.random()
+        if r < 0.01 :
+            self.xStep = random.randint(-3, 3)
+            self.yStep = random.randint(-3, 3)
+        if pg.sprite.spritecollideany(self, block.horiz_walls):
+            self.yStep = -self.yStep
+            self.xStep = random.randint(-3, 3)
+        if pg.sprite.spritecollideany(self, block.vert_walls):
+            self.xStep = -self.xStep
+            self.yStep = random.randint(-3, 3)
+        self.x += self.xStep / 1.5
+        self.y += self.yStep / 1.5
 
     def walk(self):
         #if self.step = 0:
