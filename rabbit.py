@@ -19,33 +19,19 @@ image = pg.transform.scale(pg.image.load("images/rabbit.png"), (30, 30))  # 讀�
 class RabbitSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
         super().__init__()
-        self.day = 0
-        self.age = 0
-        self.direct = None #?
-        self.step = 0
-        self.energy = 10 
-        self.success = False #?
+        self. x= x
+        self.y = y
+        self.energy = 0 
+        self.xStep = random.randint(-3, 3)
+        self.yStep = random.randint(-3, 3)
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
-        self.check()
+        group.add(self)
 
 
     def update(self):
-        self.day += 1
-        if self.day == 50:
-            self.age += 1
-            self.energy -= 2
-            self.day = random.randint(0,50)
-            if 15 <= self.age <= 20:
-                self.birth(random.choice(['u','d','r','l']))
-                self.energy -= 12
-            elif self.age > 30:
-                self.kill()
-            elif self.energy <= 0:
-                self.kill()
-            else:
-                self.walk()
+        
 
     def walk(self):
         #if self.step = 0:
@@ -64,10 +50,6 @@ class RabbitSprite(pg.sprite.Sprite):
         rabbit = RabbitSprite(self.rect.center[0],self.rect.center[1])
          
 
-    def check(self):
-        co = pg.sprite.spritecollideany(self,group)
-        if co == None:
-            group.add(self)
 
 
 # 程式從這裡開始
