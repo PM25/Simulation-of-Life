@@ -61,7 +61,7 @@ if __name__ == "__main__":
     pg.time.set_timer(pg.USEREVENT, 1000)
 
     # 隨機產生 100株草
-    for i in range(50):
+    for i in range(25):
         x = random.randint(0, window_size[0]) // 25 * 25  # x座標
         y = random.randint(0, window_size[1]) // 25 * 25  # y座標
         grass.GrassSprite(x, y)  # 在 x, y 座標創建一株草
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一株草
 
     # 隨機產生 5隻烏龜
-    for i in range(10):
+    for i in range(5):
         x = random.randint(30, window_size[0] - 30)  # x座標
         y = random.randint(30, window_size[1] - 30)  # y座標
         turtle.TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜

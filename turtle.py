@@ -45,7 +45,7 @@ class TurtleSprite(pg.sprite.Sprite):
 
     def update(self):
         self.index += 0.5
-        if self.eating:
+        if self.eating and self.g.alive():
             self.eating_index += 1
             if self.index >= len(eating_images):
                 self.index = 0
@@ -57,6 +57,11 @@ class TurtleSprite(pg.sprite.Sprite):
                 self.xStep = 0.001
             self.yStep = 0
             if self.eating_index > 80:
+                self.g.kill()
+                self.engery += 10
+                if self.engery > 100:
+                    self.birth(random.choice(["u", "d", "r", "l"]))
+                    self.engery = 0
                 self.eating = False
                 self.eating_index = 0
                 self.chase()
@@ -73,12 +78,8 @@ class TurtleSprite(pg.sprite.Sprite):
                 self.yStep = random.randint(-1, 1)
                 self.chase()
             for g in pg.sprite.spritecollide(self, grass.group, False):
-                g.kill()
+                self.g = g
                 self.eating = True
-                self.engery += 10
-                if self.engery > 100:
-                    self.birth(random.choice(["u", "d", "r", "l"]))
-                    self.engery = 0
                 break
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
@@ -131,7 +132,12 @@ class TurtleSprite(pg.sprite.Sprite):
                     self.yStep = 1
                 else:
                     self.yStep = -1
-
+            else:
+                self.xStep = random.randint(-1, 1)
+                self.yStep = random.randint(-1, 1)
+        else:
+            self.xStep = random.randint(-1, 1)
+            self.yStep = random.randint(-1, 1)
 
 # 程式從這裡開始
 if __name__ == "__main__":

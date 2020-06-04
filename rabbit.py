@@ -45,7 +45,7 @@ class RabbitSprite(pg.sprite.Sprite):
 
     def update(self):
         self.index += 1
-        if self.eating:
+        if self.eating and self.c.alive():
             self.eating_index += 1
             if self.index >= len(eating_images):
                 self.index = 0
@@ -58,6 +58,11 @@ class RabbitSprite(pg.sprite.Sprite):
             self.yStep = 0
 
             if self.eating_index > 70:
+                self.c.kill()
+                self.energy += 10
+                if self.energy > 100:
+                    self.birth(random.choice(["u", "d", "r", "l"]))
+                    self.energy = 0
                 self.eating = False
                 self.eating_index = 0
                 self.chase()
@@ -76,12 +81,8 @@ class RabbitSprite(pg.sprite.Sprite):
                 self.chase()
 
             for c in pg.sprite.spritecollide(self, carrot.group, False):
-                c.kill()
+                self.c = c
                 self.eating = True
-                self.energy += 10
-                if self.energy > 100:
-                    self.birth(random.choice(["u", "d", "r", "l"]))
-                    self.energy = 0
                 break
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
@@ -133,6 +134,12 @@ class RabbitSprite(pg.sprite.Sprite):
                     self.yStep = 2
                 else:
                     self.yStep = -2
+            else:
+                self.xStep = random.randint(-1, 1)
+                self.yStep = random.randint(-1, 1)
+        else:
+            self.xStep = random.randint(-1, 1)
+            self.yStep = random.randint(-1, 1)
 
 
 
