@@ -3,11 +3,9 @@ import random
 
 # 自己的 library
 import env
-
 import block
 import grass
 
-# 設定起始變數
 random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有烏龜物件
 window_size = env.WINDOW_SIZE  # 視窗大小
@@ -28,7 +26,6 @@ for i in range(1, 7):
     fname = f"images/animation/TURTLE/turtleeat{i}.png"
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
 
-# TODO: 幫我完成下面這個物件!
 # 烏龜
 class TurtleSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
@@ -59,7 +56,7 @@ class TurtleSprite(pg.sprite.Sprite):
                 self.image = flip_eating_images[int(self.index)]
                 self.xStep = 0.001
             self.yStep = 0
-            if self.eating_index > 100:
+            if self.eating_index > 80:
                 self.eating = False
                 self.eating_index = 0
                 self.chase()
@@ -93,12 +90,16 @@ class TurtleSprite(pg.sprite.Sprite):
         self.y += self.yStep
         if self.x <= 30:
             self.x = 30
+            self.xStep = random.randint(0, 1)
         if self.y <= 30:
             self.y = 30
+            self.yStep = random.randint(0, 1)
         if self.x >= window_size[0] - 30:
             self.x = window_size[0] - 30
+            self.xStep = random.randint(-1, 0)
         if self.y >= window_size[1] - 30:
             self.y = window_size[1] - 30
+            self.yStep = random.randint(-1, 0)
         self.rect.center = [self.x, self.y]
 
     def birth(self, direction):
@@ -120,7 +121,7 @@ class TurtleSprite(pg.sprite.Sprite):
             )
             distance = pos.distance_to(pg.math.Vector2(g.a, g.b))
 
-            if distance < 80:
+            if distance < 100:
                 if g.a > self.x:
                     self.xStep = 1
                 else:
@@ -130,9 +131,7 @@ class TurtleSprite(pg.sprite.Sprite):
                     self.yStep = 1
                 else:
                     self.yStep = -1
-            else:
-                self.xStep = random.randint(-1, 1)
-                self.yStep = random.randint(-1, 1)
+
 
 # 程式從這裡開始
 if __name__ == "__main__":

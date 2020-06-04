@@ -6,7 +6,6 @@ import env
 import block
 import carrot
 
-# 設定起始變數
 random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有兔子物件
 window_size = env.WINDOW_SIZE  # 視窗大小
@@ -27,7 +26,6 @@ for i in range(1, 17):
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
 
 
-# TODO: 幫我完成下面這個物件!
 # 兔子
 class RabbitSprite(pg.sprite.Sprite):
     def __init__(self, x, y):  # x, y 為座標
@@ -73,6 +71,8 @@ class RabbitSprite(pg.sprite.Sprite):
 
             r = random.random()
             if r < 0.025:
+                self.xStep = random.randint(-2, 2)
+                self.yStep = random.randint(-2, 2)
                 self.chase()
 
             for c in pg.sprite.spritecollide(self, carrot.group, False):
@@ -93,12 +93,16 @@ class RabbitSprite(pg.sprite.Sprite):
         self.y += self.yStep
         if self.x <= 30:
             self.x = 30
+            self.xStep = random.randint(0, 1)
         if self.y <= 30:
             self.y = 30
+            self.yStep = random.randint(0, 1)
         if self.x >= window_size[0] - 30:
             self.x = window_size[0] - 30
+            self.xStep = random.randint(-1, 0)
         if self.y >= window_size[1] - 30:
             self.y = window_size[1] - 30
+            self.yStep = random.randint(-1, 0)
         self.rect.center = [self.x, self.y]
 
     def birth(self, direction):
@@ -119,7 +123,7 @@ class RabbitSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 80:
+            if distance < 100:
                 if c.x > self.x:
                     self.xStep = 2
                 else:
@@ -129,9 +133,7 @@ class RabbitSprite(pg.sprite.Sprite):
                     self.yStep = 2
                 else:
                     self.yStep = -2
-            else:
-                self.xStep = random.randint(-2, 2)
-                self.yStep = random.randint(-2, 2)
+
 
 
 # 程式從這裡開始
