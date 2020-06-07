@@ -5,6 +5,7 @@ import random
 import env
 import block
 import carrot
+import fox
 
 random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有兔子物件
@@ -13,19 +14,19 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 17):
     fname = f"images/animation/RABBIT/rabbit{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
 flip_walk_images = []  # 讀取動畫圖片
 for i in range(1, 17):
     flip_walk_images.append(pg.transform.flip(walk_images[i - 1], True, False))
 eating_images = []
 for i in range(1, 17):
     fname = f"images/animation/RABBIT/rabbiteat{i}.png"
-    eating_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
+    eating_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
 flip_eating_images = []
 for i in range(1, 17):
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
 dead_image = pg.transform.scale(
-    pg.image.load("images/animation/RABBIT/deadrabbit.png"), (30, 30)
+    pg.image.load("images/animation/RABBIT/deadrabbit.png"), (40, 40)
 )
 
 
@@ -51,7 +52,7 @@ class RabbitSprite(pg.sprite.Sprite):
     def update(self):
         if self.dead:
             self.dead_index += 1
-            if self.dead_index > 45:
+            if self.dead_index > 50:
                 self.kill()
             return
 
@@ -77,6 +78,7 @@ class RabbitSprite(pg.sprite.Sprite):
                 self.eating = False
                 self.eating_index = 0
                 self.chase()
+            self.run()
         else:
             if self.index >= len(walk_images):
                 self.index = 0
@@ -90,6 +92,7 @@ class RabbitSprite(pg.sprite.Sprite):
                 self.xStep = random.randint(-2, 2)
                 self.yStep = random.randint(-2, 2)
                 self.chase()
+            self.run()
 
             for c in pg.sprite.spritecollide(self, carrot.group, False):
                 self.c = c
@@ -139,22 +142,43 @@ class RabbitSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 100:
+            if distance < 120:
                 if c.x > self.x:
-                    self.xStep = 2
+                    self.xStep = 1.5
                 else:
-                    self.xStep = -2
+                    self.xStep = -1.5
 
                 if c.y > self.y:
-                    self.yStep = 2
+                    self.yStep = 1.5
                 else:
-                    self.yStep = -2
+                    self.yStep = -1.5
             else:
                 self.xStep = random.randint(-1, 1)
                 self.yStep = random.randint(-1, 1)
         else:
             self.xStep = random.randint(-1, 1)
             self.yStep = random.randint(-1, 1)
+
+    def run(self):
+        pos = pg.math.Vector2(self.x, self.y)
+        if len(fox.group) > 0:
+            f = min(
+                [f for f in fox.group],
+                key=lambda f: pos.distance_to(pg.math.Vector2(f.x, f.y)),
+            )
+            distance = pos.distance_to(pg.math.Vector2(f.x, f.y))
+
+            if distance < 100:
+                self.eating = False
+                if f.x > self.x:
+                    self.xStep = -2.5
+                else:
+                    self.xStep = 2.5
+
+                if f.y > self.y:
+                    self.yStep = -2.5
+                else:
+                    self.yStep = 2.5
 
 
 # 程式從這裡開始

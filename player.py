@@ -12,7 +12,7 @@ random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有兔子物件
 window_size = env.WINDOW_SIZE  # 視窗大小
 FPS = env.FPS  # 遊戲更新率
-player_image = pg.transform.scale(pg.image.load("images/ninja.png"), (40, 40))
+player_image = pg.transform.scale(pg.image.load("images/ninja.png"), (45, 45))
 flip_player_image = pg.transform.flip(player_image, True, False)
 star_image = pg.transform.scale(pg.image.load("images/star.png"), (15, 15))
 rotate_star_images = []  # 讀取動畫圖片
@@ -56,13 +56,13 @@ class PlayerSprite(pg.sprite.Sprite):
 
     def shoot(self):
         if self.face == "r":
-            NinjaStarSprite(self.x, self.y, 10, 0)
+            NinjaStarSprite(self.x, self.y, 15, 0)
         elif self.face == "l":
-            NinjaStarSprite(self.x, self.y, -10, 0)
+            NinjaStarSprite(self.x, self.y, -15, 0)
         elif self.face == "d":
-            NinjaStarSprite(self.x, self.y, 0, 10)
+            NinjaStarSprite(self.x, self.y, 0, 15)
         elif self.face == "u":
-            NinjaStarSprite(self.x, self.y, 0, -10)
+            NinjaStarSprite(self.x, self.y, 0, -15)
 
     def stop(self, direction):
         if direction == "x":
@@ -98,10 +98,16 @@ class NinjaStarSprite(pg.sprite.Sprite):
         if self.index >= len(rotate_star_images):
             self.index = 0
         self.image = rotate_star_images[self.index]
+        self.xStep *= 0.98
+        self.yStep *= 0.98
         self.x += self.xStep
         self.y += self.yStep
         self.rect.center = [self.x, self.y]
-        if self.index > window_size[0] or self.index > window_size[1]:
+        if (
+            self.index > window_size[0]
+            or self.index > window_size[1]
+            or (abs(self.xStep) < 5 and abs(self.yStep) < 5)
+        ):
             self.get_kill()
 
         for c in (

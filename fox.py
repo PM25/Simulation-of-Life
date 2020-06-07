@@ -4,8 +4,8 @@ import random
 # 自己的 library
 import env
 import block
-import grass
-import turtle
+import grass, carrot
+import turtle, rabbit, player
 
 # 設定起始變數
 random.seed(0)  # 設定亂數的種子
@@ -15,83 +15,77 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 10):
     fname = f"images/animation/FOX/fox{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
-
-flip_walk_images = []  # 讀取動畫圖片
-for i in range(1, 10):
-    flip_walk_images.append(pg.transform.flip(walk_images[i - 1], True, False))
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
 
 eat_images = []  # 讀取動畫圖片
 for i in range(1, 6):
     fname = f"images/animation/FOX/foxeat{i}.png"
-    eat_images.append(pg.transform.scale(pg.image.load(fname), (30, 30)))
+    eat_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
 
-flip_eat_images = []
-for i in range(1, 6):
-    flip_eat_images.append(pg.transform.flip(eat_images[i - 1], True, False))
+dead_image = pg.transform.scale(
+    pg.image.load("images/animation/FOX/daed fox.png"), (40, 40)
+)
 
 # 狐狸
 class FoxSprite(pg.sprite.Sprite):
-    
     def __init__(self, x, y):
         super().__init__()
         self.index = 0
         self.x = x
         self.y = y
-        self.energy = 0
-        self.xStep = random.randint(-2, 2)
-        self.yStep = random.randint(-2, 2)
+        self.xStep = random.randint(-3, 3)
+        self.yStep = random.randint(-3, 3)
         self.image = walk_images[self.index]
         self.rect = self.image.get_rect()
         self.rect.center = [x, y]
         self.eating = False
         self.eating_index = 0
+        self.dead = False
+        self.dead_index = 0
         group.add(self)
 
     def update(self):
-        self.index += 1
+        if self.dead:
+            self.dead_index += 1
+            if self.dead_index > 50:
+                self.kill()
+            return
+
+        self.index += 0.5
         if self.eating and self.t.alive():
             self.eating_index += 1
             if self.index >= len(eat_images):
                 self.index = 0
-            if self.xStep > 0:
-                self.image = eat_images[self.index]
-                self.xStep = 0.001
-            else:
-                self.image = flip_eat_images[self.index]
-                self.xStep = -0.001
+            self.image = eat_images[int(self.index)]
+            self.xStep = 0
             self.yStep = 0
 
-            if self.eating_index > 70:
-                self.t.kill()
-                self.energy += 10
-                if self.energy > 100:
-                    self.birth(random.choice(["u", "d", "r", "l"]))
-                    self.energy = 0
+            if self.eating_index >= 50:
                 self.eating = False
                 self.eating_index = 0
                 self.chase()
-                
+            self.run()
+
         else:
             if self.index >= len(walk_images):
                 self.index = 0
-            if self.xStep > 0:
-                self.image = walk_images[self.index]
-            else:
-                self.image = flip_walk_images[self.index]
+            self.image = walk_images[int(self.index)]
 
             R = random.random()
-            if R < 0.01:
+            if R < 0.05:
                 self.xStep = random.randint(-2, 2)
                 self.yStep = random.randint(-2, 2)
                 self.chase()
+            self.run()
 
-            for t in pg.sprite.spritecollide(self, turtle.group, False):
-                self.t = t
+            for c in pg.sprite.spritecollide(
+                self, turtle.group, False
+            ) + pg.sprite.spritecollide(self, rabbit.group, False):
+                self.t = c
+                self.t.get_kill()
                 self.eating = True
                 break
-            
-            
+
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
             self.xStep = random.randint(-2, 2)
@@ -100,22 +94,20 @@ class FoxSprite(pg.sprite.Sprite):
             self.yStep = random.randint(-2, 2)
         self.x += self.xStep
         self.y += self.yStep
-        
+
         if self.x <= 30:
             self.x = 30
-            self.xStep = random.randint(0, 1)
+            self.xStep = random.randint(0, 2)
         if self.y <= 30:
             self.y = 30
-            self.yStep = random.randint(0, 1)
+            self.yStep = random.randint(0, 2)
         if self.x >= window_size[0] - 30:
             self.x = window_size[0] - 30
-            self.xStep = random.randint(-1, 0)
+            self.xStep = random.randint(-2, 0)
         if self.y >= window_size[1] - 30:
             self.y = window_size[1] - 30
-            self.yStep = random.randint(-1, 0)
+            self.yStep = random.randint(-2, 0)
         self.rect.center = [self.x, self.y]
-
-
 
     def birth(self, direction):
         if direction == "u":
@@ -127,24 +119,45 @@ class FoxSprite(pg.sprite.Sprite):
         if direction == "l":
             fox = FoxSprite(self.x - 30, self.y)
 
+    def get_kill(self):
+        self.image = dead_image
+        self.dead = True
+
     def chase(self):
         pos = pg.math.Vector2(self.x, self.y)
-        if len(turtle.group) > 0:
-            t = min(
-                [t for t in turtle.group],
-                key=lambda t:pos.distance_to(pg.math.Vector2(t.x, t.y)),
+        if len(turtle.group) > 0 or len(rabbit.group) > 0:
+            c = min(
+                [t for t in turtle.group] + [r for r in rabbit.group],
+                key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
-            distance = pos.distance_to(pg.math.Vector2(t.x, t.y))
-            if distance < 80:
-                if t.x > self.x:
-                    self.xStep = 2
+            distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
+            if distance <= 120:
+                if c.x > self.x:
+                    self.xStep = 1.5
                 else:
-                    self.xStep = -2
+                    self.xStep = -1.5
 
-                if t.y > self.y:
-                    self.yStep = 2
+                if c.y > self.y:
+                    self.yStep = 1.5
                 else:
-                    self.yStep = -2
+                    self.yStep = -1.5
+
+    def run(self):
+        pos = pg.math.Vector2(self.x, self.y)
+        distance = pos.distance_to(
+            pg.math.Vector2(player.player_sprite.x, player.player_sprite.y)
+        )
+        if distance < 180:
+            self.eating = False
+            if player.player_sprite.x > self.x:
+                self.xStep = -2.5
+            else:
+                self.xStep = 2.5
+
+            if player.player_sprite.y > self.y:
+                self.yStep = -2.5
+            else:
+                self.yStep = 2.5
 
 
 # 程式從這裡開始

@@ -23,32 +23,29 @@ class CarrotSprite(pg.sprite.Sprite):
         self.day = 0
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.center = [x,y]
+        self.rect.center = [x, y]
         self.check()
-        
 
     def update(self):
         self.day += 1
         if self.day == 365:
-            self.day = random.randint(0,364)
-            self.birth(random.choice(['u','d','r','l']))
-                
-                
+            self.day = random.randint(0, 364)
+            self.birth(random.choice(["u", "d", "r", "l"]))
+
     def birth(self, direction):
-         if direction == 'u':
-             self.y -=25
-         elif direction == 'd':
-             self.y +=25
-         elif direction == 'r':
-             self.x +=25
-         elif direction == 'l':
-             self.x -=25
-         carrot = CarrotSprite(self.x , self.y)
-            
+        if direction == "u":
+            self.y -= 25
+        elif direction == "d":
+            self.y += 25
+        elif direction == "r":
+            self.x += 25
+        elif direction == "l":
+            self.x -= 25
+        carrot = CarrotSprite(self.x, self.y)
 
     def check(self):
-        co = pg.sprite.spritecollideany(self,group)
-        co1 =pg.sprite.spritecollideany(self,block.group)
-        co2 =pg.sprite.spritecollideany(self,grass.group)
+        co = pg.sprite.spritecollideany(self, group)
+        co1 = pg.sprite.spritecollideany(self, block.group)
+        co2 = pg.sprite.spritecollideany(self, grass.group)
         if co == None and co1 == None and co2 == None:
             group.add(self)
