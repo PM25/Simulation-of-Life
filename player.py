@@ -64,9 +64,9 @@ class PlayerSprite(pg.sprite.Sprite):
 
     def stop(self, direction):
         if direction == "x":
-            self.xstep=0
+            self.xStep=0
         if direction == "y":
-            self.ystep=0
+            self.yStep=0
 
 
 # 飛鏢
@@ -75,7 +75,7 @@ class NinjaStarSprite(pg.sprite.Sprite):
         super().__init__()
         self.x = x 
         self.y = y 
-        self.xStep = 0
+        self.xStep = xStep
         self.index = 0
         self.image = rotate_star_images[self.index]
         self.rect = self.image.get_rect()
@@ -94,8 +94,8 @@ class NinjaStarSprite(pg.sprite.Sprite):
             self.kill()
             
         for t in pg.sprite.spritecollide(self, turtle.group, False):
-            self.kill(t)
-            self.kill(self)
+            t.kill()
+            self.kill()
             break
         
 
