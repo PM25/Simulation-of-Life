@@ -133,14 +133,14 @@ class FoxSprite(pg.sprite.Sprite):
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
             if distance < 100:
                 if c.x > self.x:
-                    self.xStep = 1.5
+                    self.xStep = 2
                 else:
-                    self.xStep = -1.5
+                    self.xStep = -2
 
                 if c.y > self.y:
-                    self.yStep = 1.5
+                    self.yStep = 2
                 else:
-                    self.yStep = -1.5
+                    self.yStep = -2
 
     def run(self):
         pos = pg.math.Vector2(self.x, self.y)
