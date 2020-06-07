@@ -131,7 +131,7 @@ class FoxSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance <= 120:
+            if distance < 100:
                 if c.x > self.x:
                     self.xStep = 1.5
                 else:
@@ -144,20 +144,22 @@ class FoxSprite(pg.sprite.Sprite):
 
     def run(self):
         pos = pg.math.Vector2(self.x, self.y)
-        distance = pos.distance_to(
-            pg.math.Vector2(player.player_sprite.x, player.player_sprite.y)
+        p = min(
+            [p for p in player.group],
+            key=lambda p: pos.distance_to(pg.math.Vector2(p.x, p.y)),
         )
-        if distance < 180:
+        distance = pos.distance_to(pg.math.Vector2(p.x, p.y))
+        if distance < 150:
             self.eating = False
             if player.player_sprite.x > self.x:
-                self.xStep = -2.5
+                self.xStep = -3.5
             else:
-                self.xStep = 2.5
+                self.xStep = 3.5
 
             if player.player_sprite.y > self.y:
-                self.yStep = -2.5
+                self.yStep = -3.5
             else:
-                self.yStep = 2.5
+                self.yStep = 3.5
 
 
 # 程式從這裡開始

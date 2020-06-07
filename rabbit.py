@@ -72,7 +72,7 @@ class RabbitSprite(pg.sprite.Sprite):
             if self.eating_index > 70:
                 self.c.kill()
                 self.energy += 10
-                if self.energy > 100:
+                if self.energy > 80:
                     self.birth(random.choice(["u", "d", "r", "l"]))
                     self.energy = 0
                 self.eating = False

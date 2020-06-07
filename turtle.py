@@ -71,7 +71,7 @@ class TurtleSprite(pg.sprite.Sprite):
             if self.eating_index > 80:
                 self.g.kill()
                 self.engery += 10
-                if self.engery > 100:
+                if self.engery > 80:
                     self.birth(random.choice(["u", "d", "r", "l"]))
                     self.engery = 0
                 self.eating = False

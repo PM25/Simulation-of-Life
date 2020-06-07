@@ -13,25 +13,31 @@ FPS = env.FPS
 # 程式開始
 if __name__ == "__main__":
     pg.init()
+    pg.font.init()
     pg.display.set_caption("迷你生態圈")  # 標題
     screen = pg.display.set_mode(window_size)
     bg_image = pg.transform.scale(
         pg.image.load("images/background.png"), (window_size[0], window_size[1])
     )
-    font = pg.font.SysFont("microsoftyaheimicrosoftyaheiui", 30)
+    font = pg.font.SysFont("microsoftyaheimicrosoftyaheiui", 45)
+    small_font = pg.font.SysFont("microsoftyaheimicrosoftyaheiui", 18)
     clock = pg.time.Clock()
-    pg.time.set_timer(pg.USEREVENT, 1000)
+    pg.time.set_timer(pg.USEREVENT, 500)
 
-    # 隨機產生 100株草
-    for i in range(50):
+    def show_text(text, x, y):
+        text = font.render(text, False, (255, 255, 255))
+        text_rect = text.get_rect()
+        text_rect.center = [x, y]
+        screen.blit(text, text_rect)
+
+    for i in range(100):
         x = random.randint(0, window_size[0]) // 25 * 25  # x座標
         y = random.randint(0, window_size[1]) // 25 * 25  # y座標
         grass.GrassSprite(x, y)  # 在 x, y 座標創建一株草
         x = random.randint(0, window_size[0]) // 25 * 25 - 5  # x座標
         y = random.randint(0, window_size[1]) // 25 * 25 - 5  # y座標
-        carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一株草
+        carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一株胡蘿蔔
 
-    # 隨機產生 5隻烏龜
     for i in range(10):
         x = random.randint(0, window_size[0])  # x座標
         y = random.randint(0, window_size[1])  # y座標
@@ -62,10 +68,15 @@ if __name__ == "__main__":
         pg.display.update()  # 更新畫面
 
         while Pause:
-            text = font.render("Hello World", True, (255, 255, 255))
-            screen.blit(text, (100, 100))
+            if not Win:
+                show_text("案任意鍵開始遊戲!", window_size[0] // 2, window_size[1] // 2)
+            else:
+                show_text("恭喜獲勝!!", window_size[0] // 2, window_size[1] // 2)
+            pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
+                    if Win:
+                        Done = True
                     Pause = False
                 if event.type == pg.QUIT:
                     Done = True
