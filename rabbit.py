@@ -24,6 +24,9 @@ for i in range(1, 17):
 flip_eating_images = []
 for i in range(1, 17):
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
+dead_image = pg.transform.scale(
+    pg.image.load("images/animation/RABBIT/deadrabbit.png"), (30, 30)
+)
 
 
 # 兔子
@@ -41,9 +44,17 @@ class RabbitSprite(pg.sprite.Sprite):
         self.rect.center = [x, y]
         self.eating = False
         self.eating_index = 0
+        self.dead = False
+        self.dead_index = 0
         group.add(self)
 
     def update(self):
+        if self.dead:
+            self.dead_index += 1
+            if self.dead_index > 45:
+                self.kill()
+            return
+
         self.index += 1
         if self.eating and self.c.alive():
             self.eating_index += 1
@@ -116,6 +127,10 @@ class RabbitSprite(pg.sprite.Sprite):
         if direction == "l":
             rabbit = RabbitSprite(self.x - 25, self.y)
 
+    def get_kill(self):
+        self.image = dead_image
+        self.dead = True
+
     def chase(self):
         pos = pg.math.Vector2(self.x, self.y)
         if len(carrot.group) > 0:
@@ -140,7 +155,6 @@ class RabbitSprite(pg.sprite.Sprite):
         else:
             self.xStep = random.randint(-1, 1)
             self.yStep = random.randint(-1, 1)
-
 
 
 # 程式從這裡開始

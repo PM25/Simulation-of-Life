@@ -52,6 +52,24 @@ if __name__ == "__main__":
 
         # 當有事件發生時 (例: 滑鼠、鍵盤)
         for event in pg.event.get():
+            if event.type == pg.KEYDOWN or event.type == pg.KEYUP:
+                keys = pg.key.get_pressed()
+                if keys[pg.K_UP]:
+                    player.player_sprite.move("u")
+                if keys[pg.K_DOWN]:
+                    player.player_sprite.move("d")
+                if keys[pg.K_LEFT]:
+                    player.player_sprite.move("l")
+                if keys[pg.K_RIGHT]:
+                    player.player_sprite.move("r")
+                if keys[pg.K_SPACE]:
+                    player.player_sprite.shoot()
+
+                if not (keys[pg.K_UP] or keys[pg.K_DOWN]):
+                    player.player_sprite.stop("y")
+                if not (keys[pg.K_LEFT] or keys[pg.K_RIGHT]):
+                    player.player_sprite.stop("x")
+
             # 按下結束按鍵時
             if event.type == pg.QUIT:
                 Done = True  # 遊戲結束

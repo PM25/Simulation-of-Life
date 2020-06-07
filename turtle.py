@@ -25,6 +25,9 @@ flip_eating_images = []
 for i in range(1, 7):
     fname = f"images/animation/TURTLE/turtleeat{i}.png"
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
+dead_image = pg.transform.scale(
+    pg.image.load("images/animation/TURTLE/deadtrutle.png"), (30, 30)
+)
 
 # 烏龜
 class TurtleSprite(pg.sprite.Sprite):
@@ -41,9 +44,17 @@ class TurtleSprite(pg.sprite.Sprite):
         self.yStep = random.randint(-1, 1)
         self.eating = False
         self.eating_index = 0
+        self.dead = False
+        self.dead_index = 0
         group.add(self)
 
     def update(self):
+        if self.dead:
+            self.dead_index += 1
+            if self.dead_index > 45:
+                self.kill()
+            return
+
         self.index += 0.5
         if self.eating and self.g.alive():
             self.eating_index += 1
@@ -113,6 +124,10 @@ class TurtleSprite(pg.sprite.Sprite):
         if direction == "l":
             turtle = TurtleSprite(self.x + 25, self.y)
 
+    def get_kill(self):
+        self.image = dead_image
+        self.dead = True
+
     def chase(self):
         pos = pg.math.Vector2(self.x, self.y)
         if len(grass.group) > 0:
@@ -138,6 +153,7 @@ class TurtleSprite(pg.sprite.Sprite):
         else:
             self.xStep = random.randint(-1, 1)
             self.yStep = random.randint(-1, 1)
+
 
 # 程式從這裡開始
 if __name__ == "__main__":
