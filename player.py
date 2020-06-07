@@ -27,7 +27,7 @@ class PlayerSprite(pg.sprite.Sprite):
         self.y = y 
         self.xStep = 0 
         self.yStep = 0 
-        self.face = 'l'
+        self.face ="l" 
         self.image = player_image
         self.rect = self.image.get_rect()
         self.rect.center = [self.x, self.y]
@@ -57,7 +57,7 @@ class PlayerSprite(pg.sprite.Sprite):
     def shoot(self):
         if self.face=="r":
             NinjaStarSprite(self.x,self.y, 10)
-        if self.face="l":
+        if self.face=="l":
             NinjaStarSprite(self.x,self.y, -10)
 
 
@@ -73,10 +73,31 @@ class PlayerSprite(pg.sprite.Sprite):
 class NinjaStarSprite(pg.sprite.Sprite):
     def __init__(self, x, y, xStep):  # x, y 為座標
         super().__init__()
-        pass
+        self.x = x 
+        self.y = y 
+        self.xStep = 0
+        self.index = 0
+        self.image = rotate_star_images[self.index]
+        self.rect = self.image.get_rect()
+        self.rect.center = [self.x, self.y]
+        group.add(self)
+        
 
     def update(self):
-        pass
+        self.index += 1
+        if self.index >= len(rotate_star_images):
+            self.index = 0
+        self.image = rotate_star_images[self.index]
+        self.x += self.xStep
+        self.rect.center = [self.x,self.y]
+        if  self.index > window_size[0] or self.index > window_size[1]:
+            self.kill()
+            
+        for t in pg.sprite.spritecollide(self, turtle.group, False):
+            self.kill(t)
+            self.kill(self)
+            break
+        
 
 
 player_sprite = PlayerSprite(window_size[0] // 2, window_size[1] // 2)
