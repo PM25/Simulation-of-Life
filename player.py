@@ -23,19 +23,50 @@ for i in range(0, 20):
 class PlayerSprite(pg.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
-        pass
+        self.x = x 
+        self.y = y 
+        self.xStep = 0 
+        self.yStep = 0 
+        self.face = 'l'
+        self.image = player_image
+        self.rect = self.image.get_rect()
+        self.rect.center = [self.x, self.y]
+        group.add(self)
 
     def update(self):
-        pass
+        self.x += self.xStep
+        self.y += self.yStep
+        self.rect.center = [self.x, self.y]
+        
+
+        
 
     def move(self, direction):
-        pass
+        if direction == "u":
+            self.yStep = -3
+        if direction == "d":
+            self.yStep = 3
+        if direction == "r":
+            self.xStep = 3
+        if direction == "l":
+            self.xStep = -3
+        self.image = player_image
+        self.face = direction
+            
 
     def shoot(self):
-        pass
+        if self.face=="r":
+            NinjaStarSprite(self.x,self.y, 10)
+        if self.face="l":
+            NinjaStarSprite(self.x,self.y, -10)
+
+
 
     def stop(self, direction):
-        pass
+        if direction == "x":
+            self.xstep=0
+        if direction == "y":
+            self.ystep=0
 
 
 # 飛鏢
