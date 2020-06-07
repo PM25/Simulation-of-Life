@@ -14,20 +14,21 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 17):
     fname = f"images/animation/RABBIT/rabbit{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
 flip_walk_images = []  # 讀取動畫圖片
 for i in range(1, 17):
     flip_walk_images.append(pg.transform.flip(walk_images[i - 1], True, False))
 eating_images = []
 for i in range(1, 17):
     fname = f"images/animation/RABBIT/rabbiteat{i}.png"
-    eating_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
+    eating_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
 flip_eating_images = []
 for i in range(1, 17):
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
 dead_image = pg.transform.scale(
-    pg.image.load("images/animation/RABBIT/deadrabbit.png"), (40, 40)
+    pg.image.load("images/animation/RABBIT/deadrabbit.png"), (55, 55)
 )
+dead_count = 0
 
 
 # 兔子
@@ -54,6 +55,8 @@ class RabbitSprite(pg.sprite.Sprite):
             self.dead_index += 1
             if self.dead_index > 50:
                 self.kill()
+                global dead_count
+                dead_count += 1
             return
 
         self.index += 1
@@ -142,7 +145,7 @@ class RabbitSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 120:
+            if distance < 10:
                 if c.x > self.x:
                     self.xStep = 1.5
                 else:
@@ -168,7 +171,7 @@ class RabbitSprite(pg.sprite.Sprite):
             )
             distance = pos.distance_to(pg.math.Vector2(f.x, f.y))
 
-            if distance < 100:
+            if distance < 75:
                 self.eating = False
                 if f.x > self.x:
                     self.xStep = -2.5
@@ -179,51 +182,3 @@ class RabbitSprite(pg.sprite.Sprite):
                     self.yStep = -2.5
                 else:
                     self.yStep = 2.5
-
-
-# 程式從這裡開始
-if __name__ == "__main__":
-    pg.init()
-    pg.display.set_caption("迷你生態圈")  # 標題
-    screen = pg.display.set_mode(window_size)
-    bg_image = pg.image.load("images/background.png")  # 背景圖片
-    clock = pg.time.Clock()
-    pg.time.set_timer(pg.USEREVENT, 1000)
-
-    # 隨機產生 25株紅蘿蔔
-    for i in range(25):
-        x = random.randint(0, window_size[0]) // 25 * 25  # x座標
-        y = random.randint(0, window_size[1]) // 25 * 25  # y座標
-        carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一個紅蘿蔔
-
-    # 隨機產生 3隻兔子
-    for i in range(10):
-        x = random.randint(30, window_size[0] - 50)  # x座標
-        y = random.randint(30, window_size[1] - 50)  # y座標
-        RabbitSprite(x, y)  # 在 x, y 座標創建一隻兔子
-
-    # 把所有物件集合起來
-    sprites = pg.sprite.OrderedUpdates(carrot.group, group)
-
-    # 遊戲迴圈
-    done = False
-    while not done:
-        clock.tick(FPS)  # 設定 FPS
-        screen.blit(bg_image, [0, 0])  # 畫遊戲背景
-        sprites.update()  # 執行所有 TurtleSprite, GrassSprite 裡面的 Update()
-        sprites.draw(screen)  # 畫出所有 TurtleSprite, GrassSprite 到遊戲上
-        pg.display.update()  # 更新畫面
-
-        # 當有事件發生時 (例: 滑鼠、鍵盤)
-        for event in pg.event.get():
-            # 按下結束按鍵時
-            if event.type == pg.QUIT:
-                done = True  # 遊戲結束
-            if event.type == pg.USEREVENT:
-                sprites = pg.sprite.OrderedUpdates(carrot.group, group)
-                # 若超過 550 隻兔子的話結束遊戲
-                if len(group) > 550:
-                    Done = True
-                # 顯示有多少兔子在畫面上
-                print(f"現在畫面上有 {len(group)} 隻兔子")
-    pg.quit()  # 結束遊戲

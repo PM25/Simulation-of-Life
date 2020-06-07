@@ -1,6 +1,8 @@
 import random
 import pygame as pg
 from time import sleep
+from pathlib import Path
+import datetime
 
 # 自己的 library
 import env, block
@@ -19,16 +21,31 @@ if __name__ == "__main__":
     bg_image = pg.transform.scale(
         pg.image.load("images/background.png"), (window_size[0], window_size[1])
     )
-    font = pg.font.SysFont("microsoftyaheimicrosoftyaheiui", 45)
-    small_font = pg.font.SysFont("microsoftyaheimicrosoftyaheiui", 18)
+    font = pg.font.Font(str(Path("fonts/jf-openhuninn-1.1.ttf")), 50)
     clock = pg.time.Clock()
     pg.time.set_timer(pg.USEREVENT, 500)
+    first_time = datetime.datetime.now()
 
     def show_text(text, x, y):
-        text = font.render(text, False, (255, 255, 255))
+        text = font.render(text, False, (60, 60, 60))
         text_rect = text.get_rect()
         text_rect.center = [x, y]
         screen.blit(text, text_rect)
+
+    def show_multiline(texts, x, y):
+        line = len(texts)
+        pg.draw.rect(
+            screen,
+            (245, 245, 245),
+            (
+                window_size[0] // 10,
+                window_size[1] // 10,
+                window_size[0] // 10 * 8,
+                window_size[1] // 10 * 8,
+            ),
+        )
+        for i, text in enumerate(texts):
+            show_text(text, x, y - (line // 2 - i) * 45)
 
     for i in range(100):
         x = random.randint(0, window_size[0]) // 25 * 25  # x座標
@@ -69,15 +86,43 @@ if __name__ == "__main__":
 
         while Pause:
             if not Win:
-                show_text("案任意鍵開始遊戲!", window_size[0] // 2, window_size[1] // 2)
+                show_multiline(
+                    [
+                        "遊戲說明",
+                        "-------------",
+                        "鍵盤上下左右控制玩家移動",
+                        "空白鍵發射飛鏢",
+                        "打死畫面上的所有狐狸即可獲得勝利",
+                        "案任意鍵開始遊戲!",
+                    ],
+                    window_size[0] // 2,
+                    window_size[1] // 2,
+                )
             else:
-                show_text("恭喜獲勝!!", window_size[0] // 2, window_size[1] // 2)
+                difference = end_time - first_time
+                seconds_in_day = 24 * 60 * 60
+                minutes, seconds = divmod(
+                    difference.days * seconds_in_day + difference.seconds, 60
+                )
+                show_multiline(
+                    [
+                        "恭喜獲勝!",
+                        "----------",
+                        f"遊戲時間: {minutes}分, {seconds}秒",
+                        f"死亡數: 烏龜x{turtle.dead_count}, 兔子x{rabbit.dead_count}, 狐狸x{fox.dead_count}",
+                    ],
+                    window_size[0] // 2,
+                    window_size[1] // 2,
+                )
+                # show_text("恭喜獲勝!!", window_size[0] // 2, window_size[1] // 2)
             pg.display.update()
             for event in pg.event.get():
                 if event.type == pg.KEYDOWN:
-                    if Win:
+                    keys = pg.key.get_pressed()
+                    if keys[pg.K_ESCAPE]:
                         Done = True
-                    Pause = False
+                    if not Win:
+                        Pause = False
                 if event.type == pg.QUIT:
                     Done = True
                     Pause = False
@@ -96,6 +141,10 @@ if __name__ == "__main__":
                     player.player_sprite.move("r")
                 if keys[pg.K_SPACE]:
                     player.player_sprite.shoot()
+                if keys[pg.K_p]:
+                    Pause = True
+                if keys[pg.K_ESCAPE]:
+                    Done = True
 
                 if not (keys[pg.K_UP] or keys[pg.K_DOWN]):
                     player.player_sprite.stop("y")
@@ -115,6 +164,7 @@ if __name__ == "__main__":
             if len(fox.group) == 0:
                 Pause = True
                 Win = True
+                end_time = datetime.datetime.now()
             # 更新物件內容
             sprites = pg.sprite.OrderedUpdates(
                 grass.group,

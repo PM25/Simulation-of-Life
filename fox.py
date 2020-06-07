@@ -15,16 +15,17 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 10):
     fname = f"images/animation/FOX/fox{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
+    walk_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
 
 eat_images = []  # 讀取動畫圖片
 for i in range(1, 6):
     fname = f"images/animation/FOX/foxeat{i}.png"
-    eat_images.append(pg.transform.scale(pg.image.load(fname), (40, 40)))
+    eat_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
 
 dead_image = pg.transform.scale(
-    pg.image.load("images/animation/FOX/daed fox.png"), (40, 40)
+    pg.image.load("images/animation/FOX/daed fox.png"), (55, 55)
 )
+dead_count = 0
 
 # 狐狸
 class FoxSprite(pg.sprite.Sprite):
@@ -49,6 +50,8 @@ class FoxSprite(pg.sprite.Sprite):
             self.dead_index += 1
             if self.dead_index > 50:
                 self.kill()
+                global dead_count
+                dead_count += 1
             return
 
         self.index += 0.5
@@ -131,7 +134,7 @@ class FoxSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 100:
+            if distance < 70:
                 if c.x > self.x:
                     self.xStep = 2
                 else:
@@ -149,7 +152,7 @@ class FoxSprite(pg.sprite.Sprite):
             key=lambda p: pos.distance_to(pg.math.Vector2(p.x, p.y)),
         )
         distance = pos.distance_to(pg.math.Vector2(p.x, p.y))
-        if distance < 150:
+        if distance < 120:
             self.eating = False
             if player.player_sprite.x > self.x:
                 self.xStep = -3.5
@@ -160,50 +163,3 @@ class FoxSprite(pg.sprite.Sprite):
                 self.yStep = -3.5
             else:
                 self.yStep = 3.5
-
-
-# 程式從這裡開始
-if __name__ == "__main__":
-    pg.init()
-    pg.display.set_caption("迷你生態圈")  # 標題
-    screen = pg.display.set_mode(window_size)
-    bg_image = pg.image.load("images/background.png")
-    clock = pg.time.Clock()
-    pg.time.set_timer(pg.USEREVENT, 500)
-
-    # 隨機產生 100株草
-    for i in range(50):
-        x = random.randint(0, window_size[0]) // 25 * 25  # x座標
-        y = random.randint(0, window_size[1]) // 25 * 25  # y座標
-        grass.GrassSprite(x, y)  # 在 x, y 座標創建一株草
-
-    # 隨機產生 5隻烏龜
-    for i in range(10):
-        x = random.randint(30, window_size[0] - 30)  # x座標
-        y = random.randint(30, window_size[1] - 30)  # y座標
-        turtle.TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜
-
-    # 隨機產生 5隻狐狸
-    for i in range(3):
-        x = random.randint(30, window_size[0] - 30)  # x座標
-        y = random.randint(30, window_size[1] - 30)  # y座標
-        FoxSprite(x, y)  # 在 x, y 座標創建一隻狐狸
-
-    # 把所有物件集合起來
-    sprites = pg.sprite.OrderedUpdates(grass.group, turtle.group, group)
-
-    # 遊戲迴圈
-    Done = False
-    while not Done:
-        clock.tick(FPS)  # 設定 FPS
-        screen.blit(bg_image, [0, 0])  # 畫遊戲背景
-        sprites.update()  # 執行所有 Sprite 物件裡面的 Update()
-        sprites.draw(screen)  # 畫出所有 Sprite 物件到遊戲上
-        pg.display.update()  # 更新畫面
-
-        # 當有事件發生時 (例: 滑鼠、鍵盤)
-        for event in pg.event.get():
-            if event.type == pg.QUIT:
-                Done = True  # 遊戲結束
-            sprites = pg.sprite.OrderedUpdates(grass.group, turtle.group, group)
-    pg.quit()  # 結束遊戲
