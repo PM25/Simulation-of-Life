@@ -55,16 +55,16 @@ if __name__ == "__main__":
         y = random.randint(0, window_size[1]) // 25 * 25 - 5  # y座標
         carrot.CarrotSprite(x, y)  # 在 x, y 座標創建一株胡蘿蔔
 
-    for i in range(10):
+    for i in range(15):
         x = random.randint(0, window_size[0])  # x座標
         y = random.randint(0, window_size[1])  # y座標
         turtle.TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜
-    for i in range(5):
+    for i in range(10):
         x = random.randint(0, window_size[0])  # x座標
         y = random.randint(0, window_size[1])  # y座標
         rabbit.RabbitSprite(x, y)  # 在 x, y 座標創建一隻兔子
 
-    for i in range(3):
+    for i in range(5):
         x = random.randint(0, window_size[0])
         y = random.randint(0, window_size[1])
         fox.FoxSprite(x, y)
