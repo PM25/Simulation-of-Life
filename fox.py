@@ -15,14 +15,14 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 10):
     fname = f"images/animation/FOX/fox{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
+    walk_images.append(pg.transform.smoothscale(pg.image.load(fname), (55, 55)))
 
 eat_images = []  # 讀取動畫圖片
 for i in range(1, 6):
     fname = f"images/animation/FOX/foxeat{i}.png"
-    eat_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
+    eat_images.append(pg.transform.smoothscale(pg.image.load(fname), (55, 55)))
 
-dead_image = pg.transform.scale(
+dead_image = pg.transform.smoothscale(
     pg.image.load("images/animation/FOX/daed fox.png"), (55, 55)
 )
 dead_count = 0

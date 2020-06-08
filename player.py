@@ -12,9 +12,9 @@ random.seed(0)  # 設定亂數的種子
 group = pg.sprite.Group()  # 變數 group用來存放所有兔子物件
 window_size = env.WINDOW_SIZE  # 視窗大小
 FPS = env.FPS  # 遊戲更新率
-player_image = pg.transform.scale(pg.image.load("images/ninja.png"), (55, 55))
+player_image = pg.transform.smoothscale(pg.image.load("images/ninja.png"), (55, 55))
 flip_player_image = pg.transform.flip(player_image, True, False)
-star_image = pg.transform.scale(pg.image.load("images/star.png"), (15, 15))
+star_image = pg.transform.smoothscale(pg.image.load("images/star.png"), (15, 15))
 rotate_star_images = []  # 讀取動畫圖片
 for i in range(0, 20):
     rotate_star_images.append(pg.transform.rotate(star_image, 18 * i))

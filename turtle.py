@@ -14,19 +14,19 @@ FPS = env.FPS  # 遊戲更新率
 walk_images = []  # 讀取動畫圖片
 for i in range(1, 6):
     fname = f"images/animation/TURTLE/turtle{i}.png"
-    walk_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
+    walk_images.append(pg.transform.smoothscale(pg.image.load(fname), (55, 55)))
 flip_walk_images = []  # 讀取動畫圖片
 for i in range(1, 6):
     flip_walk_images.append(pg.transform.flip(walk_images[i - 1], True, False))
 eating_images = []
 for i in range(1, 7):
     fname = f"images/animation/TURTLE/turtleeat{i}.png"
-    eating_images.append(pg.transform.scale(pg.image.load(fname), (55, 55)))
+    eating_images.append(pg.transform.smoothscale(pg.image.load(fname), (55, 55)))
 flip_eating_images = []
 for i in range(1, 7):
     fname = f"images/animation/TURTLE/turtleeat{i}.png"
     flip_eating_images.append(pg.transform.flip(eating_images[i - 1], True, False))
-dead_image = pg.transform.scale(
+dead_image = pg.transform.smoothscale(
     pg.image.load("images/animation/TURTLE/deadtrutle.png"), (55, 55)
 )
 dead_count = 0

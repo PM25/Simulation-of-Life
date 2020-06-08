@@ -21,13 +21,13 @@ if __name__ == "__main__":
     bg_image = pg.transform.scale(
         pg.image.load("images/background.png"), (window_size[0], window_size[1])
     )
-    font = pg.font.Font(str(Path("fonts/jf-openhuninn-1.1.ttf")), 50)
+    font = pg.font.Font(str(Path("fonts/jf-openhuninn-1.1.ttf")), 45)
     clock = pg.time.Clock()
     pg.time.set_timer(pg.USEREVENT, 500)
     first_time = datetime.datetime.now()
 
     def show_text(text, x, y):
-        text = font.render(text, False, (60, 60, 60))
+        text = font.render(text, True, (60, 60, 60))
         text_rect = text.get_rect()
         text_rect.center = [x, y]
         screen.blit(text, text_rect)
@@ -59,6 +59,7 @@ if __name__ == "__main__":
         x = random.randint(0, window_size[0])  # x座標
         y = random.randint(0, window_size[1])  # y座標
         turtle.TurtleSprite(x, y)  # 在 x, y 座標創建一隻烏龜
+    for i in range(5):
         x = random.randint(0, window_size[0])  # x座標
         y = random.randint(0, window_size[1])  # y座標
         rabbit.RabbitSprite(x, y)  # 在 x, y 座標創建一隻兔子
@@ -110,6 +111,9 @@ if __name__ == "__main__":
                         "----------",
                         f"遊戲時間: {minutes}分, {seconds}秒",
                         f"死亡數: 烏龜x{turtle.dead_count}, 兔子x{rabbit.dead_count}, 狐狸x{fox.dead_count}",
+                        "----------",
+                        "美工設計: 王姵淇",
+                        "程式開發: 黃品硯, 李德珊, 許家菱, 王姵淇",
                     ],
                     window_size[0] // 2,
                     window_size[1] // 2,
