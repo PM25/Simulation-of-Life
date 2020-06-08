@@ -48,6 +48,7 @@ class TurtleSprite(pg.sprite.Sprite):
         self.eating_index = 0
         self.dead = False
         self.dead_index = 0
+        self.run_index = 0
         group.add(self)
 
     def update(self):
@@ -60,7 +61,7 @@ class TurtleSprite(pg.sprite.Sprite):
             return
 
         self.index += 0.3
-        if self.eating and self.g.alive():
+        if self.eating and self.g.alive() and self.run_index == 0:
             self.eating_index += 1
             if self.index >= len(eating_images):
                 self.index = 0
@@ -89,15 +90,18 @@ class TurtleSprite(pg.sprite.Sprite):
             else:
                 self.image = flip_walk_images[int(self.index)]
             r = random.random()
-            if r < 0.01:
+            if r < 0.015:
                 self.xStep = random.randint(-1, 1)
                 self.yStep = random.randint(-1, 1)
                 self.chase()
             self.run()
-            for g in pg.sprite.spritecollide(self, grass.group, False):
-                self.g = g
-                self.eating = True
-                break
+            if self.run_index > 0:
+                self.run_index -= 1
+            else:
+                for g in pg.sprite.spritecollide(self, grass.group, False):
+                    self.g = g
+                    self.eating = True
+                    break
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
             self.xStep = random.randint(-1, 1)
@@ -143,7 +147,7 @@ class TurtleSprite(pg.sprite.Sprite):
             )
             distance = pos.distance_to(pg.math.Vector2(g.a, g.b))
 
-            if distance < 100:
+            if distance < 130:
                 if g.a > self.x:
                     self.xStep = 1
                 else:
@@ -169,14 +173,15 @@ class TurtleSprite(pg.sprite.Sprite):
             )
             distance = pos.distance_to(pg.math.Vector2(f.x, f.y))
 
-            if distance < 75:
+            if distance < 130:
                 self.eating = False
+                self.run_index = 20
                 if f.x > self.x:
-                    self.xStep = -1
+                    self.xStep = -1.5
                 else:
-                    self.xStep = 1
+                    self.xStep = 1.5
 
                 if f.y > self.y:
-                    self.yStep = -1
+                    self.yStep = -1.5
                 else:
-                    self.yStep = 1
+                    self.yStep = 1.5

@@ -43,6 +43,7 @@ class FoxSprite(pg.sprite.Sprite):
         self.eating_index = 0
         self.dead = False
         self.dead_index = 0
+        self.run_index = 0
         group.add(self)
 
     def update(self):
@@ -55,7 +56,7 @@ class FoxSprite(pg.sprite.Sprite):
             return
 
         self.index += 0.5
-        if self.eating and self.t.alive():
+        if self.eating and self.t.alive() and self.run_index == 0:
             self.eating_index += 1
             if self.index >= len(eat_images):
                 self.index = 0
@@ -76,25 +77,27 @@ class FoxSprite(pg.sprite.Sprite):
 
             R = random.random()
             if R < 0.05:
-                self.xStep = random.randint(-2, 2)
-                self.yStep = random.randint(-2, 2)
+                self.xStep = random.randint(-3, 3)
+                self.yStep = random.randint(-3, 3)
                 self.chase()
             self.run()
-
-            for c in pg.sprite.spritecollide(
-                self, turtle.group, False
-            ) + pg.sprite.spritecollide(self, rabbit.group, False):
-                self.t = c
-                self.t.get_kill()
-                self.eating = True
-                break
+            if self.run_index > 0:
+                self.run_index -= 1
+            else:
+                for c in pg.sprite.spritecollide(
+                    self, turtle.group, False
+                ) + pg.sprite.spritecollide(self, rabbit.group, False):
+                    self.t = c
+                    self.t.get_kill()
+                    self.eating = True
+                    break
 
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
-            self.xStep = random.randint(-2, 2)
+            self.xStep = random.randint(-3, 3)
         if pg.sprite.spritecollideany(self, block.vert_walls):
             self.xStep = -self.xStep
-            self.yStep = random.randint(-2, 2)
+            self.yStep = random.randint(-3, 3)
         self.x += self.xStep
         self.y += self.yStep
 
@@ -134,7 +137,7 @@ class FoxSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 70:
+            if distance < 100:
                 if c.x > self.x:
                     self.xStep = 2
                 else:
@@ -154,6 +157,7 @@ class FoxSprite(pg.sprite.Sprite):
         distance = pos.distance_to(pg.math.Vector2(p.x, p.y))
         if distance < 120:
             self.eating = False
+            self.run_index = 30
             if player.player_sprite.x > self.x:
                 self.xStep = -3.5
             else:

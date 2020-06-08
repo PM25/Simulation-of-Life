@@ -31,7 +31,15 @@ class GrassSprite(pg.sprite.Sprite):
         co = pg.sprite.spritecollideany(self, group)
         co1 = pg.sprite.spritecollideany(self, block.group)
         co2 = pg.sprite.spritecollideany(self, carrot.group)
-        if co == None and co1 == None and co2 == None:
+        if (
+            co == None
+            and co1 == None
+            and co2 == None
+            and self.a > 0
+            and self.a < window_size[0]
+            and self.b > 0
+            and self.b < window_size[1]
+        ):
             group.add(self)
 
     def birth(self, direction):

@@ -48,6 +48,7 @@ class RabbitSprite(pg.sprite.Sprite):
         self.eating_index = 0
         self.dead = False
         self.dead_index = 0
+        self.run_index = 0
         group.add(self)
 
     def update(self):
@@ -60,7 +61,7 @@ class RabbitSprite(pg.sprite.Sprite):
             return
 
         self.index += 1
-        if self.eating and self.c.alive():
+        if self.eating and self.c.alive() and self.run_index == 0:
             self.eating_index += 1
             if self.index >= len(eating_images):
                 self.index = 0
@@ -96,11 +97,13 @@ class RabbitSprite(pg.sprite.Sprite):
                 self.yStep = random.randint(-2, 2)
                 self.chase()
             self.run()
-
-            for c in pg.sprite.spritecollide(self, carrot.group, False):
-                self.c = c
-                self.eating = True
-                break
+            if(self.run_index > 0):
+                self.run_index -= 1
+            else:
+                for c in pg.sprite.spritecollide(self, carrot.group, False):
+                    self.c = c
+                    self.eating = True
+                    break
         if pg.sprite.spritecollideany(self, block.horiz_walls):
             self.yStep = -self.yStep
             self.xStep = random.randint(-2, 2)
@@ -145,7 +148,7 @@ class RabbitSprite(pg.sprite.Sprite):
                 key=lambda c: pos.distance_to(pg.math.Vector2(c.x, c.y)),
             )
             distance = pos.distance_to(pg.math.Vector2(c.x, c.y))
-            if distance < 10:
+            if distance < 100:
                 if c.x > self.x:
                     self.xStep = 1.5
                 else:
@@ -156,11 +159,11 @@ class RabbitSprite(pg.sprite.Sprite):
                 else:
                     self.yStep = -1.5
             else:
-                self.xStep = random.randint(-1, 1)
-                self.yStep = random.randint(-1, 1)
+                self.xStep = random.randint(-2, 2)
+                self.yStep = random.randint(-2, 2)
         else:
-            self.xStep = random.randint(-1, 1)
-            self.yStep = random.randint(-1, 1)
+            self.xStep = random.randint(-2, 2)
+            self.yStep = random.randint(-2, 2)
 
     def run(self):
         pos = pg.math.Vector2(self.x, self.y)
@@ -171,8 +174,9 @@ class RabbitSprite(pg.sprite.Sprite):
             )
             distance = pos.distance_to(pg.math.Vector2(f.x, f.y))
 
-            if distance < 75:
+            if distance < 100:
                 self.eating = False
+                self.run_index = 20
                 if f.x > self.x:
                     self.xStep = -2.5
                 else:

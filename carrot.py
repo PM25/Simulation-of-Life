@@ -47,5 +47,13 @@ class CarrotSprite(pg.sprite.Sprite):
         co = pg.sprite.spritecollideany(self, group)
         co1 = pg.sprite.spritecollideany(self, block.group)
         co2 = pg.sprite.spritecollideany(self, grass.group)
-        if co == None and co1 == None and co2 == None:
+        if (
+            co == None
+            and co1 == None
+            and co2 == None
+            and self.x > 0
+            and self.x < window_size[0]
+            and self.y > 0
+            and self.y < window_size[1]
+        ):
             group.add(self)
