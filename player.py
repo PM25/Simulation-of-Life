@@ -19,6 +19,10 @@ rotate_star_images = []  # 讀取動畫圖片
 for i in range(0, 20):
     rotate_star_images.append(pg.transform.rotate(star_image, 18 * i))
 
+pg.mixer.init(22100, -16, 2, 64)
+shoot = pg.mixer.Sound("sounds/shoot.wav")
+hit = pg.mixer.Sound("sounds/hit.ogg")
+
 # 玩家
 class PlayerSprite(pg.sprite.Sprite):
     def __init__(self, x, y):
@@ -55,6 +59,7 @@ class PlayerSprite(pg.sprite.Sprite):
         self.face = direction
 
     def shoot(self):
+        shoot.play()
         if self.face == "r":
             NinjaStarSprite(self.x, self.y, 15, 0)
         elif self.face == "l":
@@ -115,6 +120,7 @@ class NinjaStarSprite(pg.sprite.Sprite):
             + pg.sprite.spritecollide(self, rabbit.group, False)
             + pg.sprite.spritecollide(self, fox.group, False)
         ):
+            hit.play()
             c.get_kill()
             self.get_kill()
             break
